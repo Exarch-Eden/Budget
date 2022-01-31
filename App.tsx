@@ -1,21 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import { createNativeStackNavigator as createStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from './src/screens/Home';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 
 const App = () => {
     const Stack = createStackNavigator()
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{
-                headerShown: false
-            }}>
-                <Stack.Screen name='Home' component={MainBottomTab} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator screenOptions={{
+                    headerShown: false
+                }}>
+                    <Stack.Screen name='Home' component={MainBottomTab} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
     )
 };
 
