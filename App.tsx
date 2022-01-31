@@ -1,7 +1,8 @@
 import React from 'react'
-import {Text, View} from 'react-native'
+import { Text, View } from 'react-native'
 import { createNativeStackNavigator as createStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from './src/screens/Home';
 
 const App = () => {
@@ -12,11 +13,20 @@ const App = () => {
             <Stack.Navigator screenOptions={{
                 headerShown: false
             }}>
-                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='Home' component={MainBottomTab} />
             </Stack.Navigator>
         </NavigationContainer>
-        // <View><Text>Budget app!</Text></View>
     )
 };
+
+const MainBottomTab = () => {
+    const Tab = createBottomTabNavigator()
+
+    return (
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+            <Tab.Screen name='Dashboard' component={Home} />
+        </Tab.Navigator>
+    )
+}
 
 export default App;
