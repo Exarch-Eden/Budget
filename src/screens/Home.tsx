@@ -43,8 +43,9 @@ const Home = () => {
         ]
     }
 
-    const addButtonOnPress = () => {
-        setModalVisible(true)
+    const modalAddButtonOnPress = () => {
+        console.log('modalAddButton()');
+        
     }
 
     return (
@@ -57,12 +58,26 @@ const Home = () => {
                         style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.5)',
                             width: '100%',
-                            height: Dimensions.get('screen').height * 0.4, opacity: 0.5
+                            height: '100%'
+                            // height: Dimensions.get('screen').height * 0.4, opacity: 0.5
                         }}
                     >
                     </View>
                 </TouchableWithoutFeedback>
-                <View style={{ alignItems: 'center', borderRadius: 25, padding: 20, paddingTop: 30, backgroundColor: 'white', width: '100%', height: Dimensions.get('screen').height * 0.6 }}>
+                <View
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        alignItems: 'center',
+                        borderTopRightRadius: 15,
+                        borderTopLeftRadius: 15,
+                        padding: 20,
+                        paddingTop: 30,
+                        backgroundColor: 'white',
+                        width: '100%',
+                        // height: Dimensions.get('screen').height * 0.6,
+                    }}
+                >
                     <View>
                         <Text>This is a modal</Text>
                     </View>
@@ -102,9 +117,14 @@ const Home = () => {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
-                        <Text style={{ color: 'red' }}>Cancel</Text>
-                    </TouchableOpacity>
+                    <View style={{ width: '100%',  }}>
+                        <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
+                            <Text style={{ color: 'red' }}>Add</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCancelButton}>
+                            <Text style={{ color: 'red' }}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Modal>
             <View style={styles.headerContainer}>
@@ -121,7 +141,7 @@ const Home = () => {
                     />
                 </View>
             </View>
-            <TouchableOpacity style={styles.addButton} onPress={() => addButtonOnPress()}>
+            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
             </TouchableOpacity>
         </View>
@@ -156,12 +176,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    cancelButton: {
+    modalAddButton: {
+        borderColor: 'orange',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginBottom: 10,
+        padding: 20,
+    },
+    modalCancelButton: {
         borderColor: 'red',
         borderWidth: 1,
+        borderRadius: 10,
         padding: 20,
-        width: '80%',
-        marginTop: 'auto'
+        // marginTop: 10,
+        // marginBottom: 'auto'
     },
     chosenTypeButton: {
         flex: 1,
