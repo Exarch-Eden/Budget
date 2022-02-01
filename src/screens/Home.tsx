@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { useAppSelector } from '../redux/hooks';
 import { selectUserData } from '../redux/reducers/userSlice';
 // import { PieChart } from 'react-native-chart-kit'
@@ -8,6 +8,8 @@ import { PieChart, PieChartData } from 'react-native-svg-charts'
 
 const Home = () => {
     const { income, spendings } = useAppSelector(selectUserData)
+
+    const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
         // TODO: get user data from asyncstorage
@@ -38,8 +40,23 @@ const Home = () => {
         ]
     }
 
+    const addButtonOnPress = () => {
+        setModalVisible(true)
+    }
+
     return (
         <View style={styles.container as ViewStyle}>
+            <Modal visible={modalVisible} transparent>
+                <View style={{ width: '100%', height: Dimensions.get('screen').height * 0.4, opacity: 0.5 }}></View>
+                <View style={{ borderRadius: 25, padding: 20, paddingTop: 30, backgroundColor: 'white', width: '100%', height: Dimensions.get('screen').height * 0.6 }}>
+                    <View>
+                        <Text>This is a modal</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => setModalVisible(false)} style={{ borderColor: 'red', borderWidth: 1, padding: 20, width: '80%' }}>
+                        <Text>Cancel</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
@@ -54,7 +71,9 @@ const Home = () => {
                     />
                 </View>
             </View>
-
+            <TouchableOpacity style={styles.addButton} onPress={() => addButtonOnPress()}>
+                <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
+            </TouchableOpacity>
         </View>
     )
 };
@@ -73,6 +92,19 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         alignItems: 'center'
+    },
+    addButton: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        margin: 20,
+        backgroundColor: '#ccc',
+        borderRadius: 50,
+        width: 48,
+        height: 48,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
 
