@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
-import { useAppSelector } from '../redux/hooks';
-import { selectUserData } from '../redux/reducers/userSlice';
+import React, { ClassAttributes, createRef, LegacyRef, useEffect, useRef, useState } from 'react';
+import { Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { selectUserData, setUserData } from '../redux/reducers/userSlice';
 // import { PieChart } from 'react-native-chart-kit'
 // import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
 import { PieChart, PieChartData } from 'react-native-svg-charts'
@@ -10,9 +10,14 @@ type ChosenMonetaryType = 'income' | 'expense'
 
 const Home = () => {
     const { income, spendings } = useAppSelector(selectUserData)
+    const dispatch = useAppDispatch()
 
     const [modalVisible, setModalVisible] = useState(false)
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
+    const [addedValue, setAddedValue] = useState(0)
+    const [addValueInput, setAddValueInput] = useState<string | undefined>()
+
+    const textInputRef = createRef<TextInput>()
 
     useEffect(() => {
         // TODO: get user data from asyncstorage
@@ -22,10 +27,12 @@ const Home = () => {
     const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
 
     const generatePieData = (): PieChartData[] => {
+        const bothBlank = !income && !spendings
+
         // for react-native-svg-charts
         return [
             {
-                value: income || 50,
+                value: bothBlank ? 50 : income,
                 svg: {
                     fill: randomColor(),
                     onPress: () => { }
@@ -33,7 +40,7 @@ const Home = () => {
                 key: `income`
             },
             {
-                value: spendings || 50,
+                value: bothBlank ? 50 : spendings,
                 svg: {
                     fill: randomColor(),
                     onPress: () => { }
@@ -45,7 +52,18 @@ const Home = () => {
 
     const modalAddButtonOnPress = () => {
         console.log('modalAddButton()');
+
+        const isIncome = chosenType === 'income'
+
+        console.log('isIncome: ', isIncome);
+        console.log('new income: ', isIncome ? income + addedValue : income);
+        console.log('new spendings: ', isIncome ? spendings : spendings + addedValue);
         
+
+        dispatch(setUserData({
+            income: isIncome ? income + addedValue : income,
+            spendings: isIncome ? spendings : spendings + addedValue
+        }))
     }
 
     return (
@@ -64,68 +82,99 @@ const Home = () => {
                     >
                     </View>
                 </TouchableWithoutFeedback>
-                <View
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        alignItems: 'center',
-                        borderTopRightRadius: 15,
-                        borderTopLeftRadius: 15,
-                        padding: 20,
-                        paddingTop: 30,
-                        backgroundColor: 'white',
-                        width: '100%',
-                        // height: Dimensions.get('screen').height * 0.6,
-                    }}
-                >
-                    <View>
-                        <Text>This is a modal</Text>
-                    </View>
+                <TouchableWithoutFeedback onPress={() => textInputRef.current?.blur()}>
                     <View
                         style={{
-                            flexDirection: 'row',
+                            position: 'absolute',
+                            bottom: 0,
+                            alignItems: 'center',
+                            borderTopRightRadius: 15,
+                            borderTopLeftRadius: 15,
+                            padding: 20,
+                            paddingTop: 30,
+                            backgroundColor: 'white',
                             width: '100%',
-                            marginVertical: 10
+                            // height: Dimensions.get('screen').height * 0.6,
                         }}
                     >
-                        <TouchableOpacity
-                            onPress={() => setChosenType('income')}
-                            style={[styles.chosenTypeButton, {
-                                backgroundColor: chosenType === 'income' ? 'green' : 'white',
-                                borderColor: 'green',
-                                marginRight: 10
-                            }]}
+                        <View>
+                            <Text>This is a modal</Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                width: '100%',
+                                marginVertical: 10
+                            }}
                         >
-                            <Text style={{
-                                color: chosenType === 'income' ? 'white' : 'green'
-                            }}>
-                                Income
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => setChosenType('expense')}
-                            style={[styles.chosenTypeButton, {
-                                backgroundColor: chosenType === 'expense' ? 'red' : 'white',
-                                borderColor: 'red',
-                                marginLeft: 10
-                            }]}
-                        >
-                            <Text style={{
-                                color: chosenType === 'expense' ? 'white' : 'red'
-                            }}>
-                                Expense
-                            </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => setChosenType('income')}
+                                style={[styles.chosenTypeButton, {
+                                    backgroundColor: chosenType === 'income' ? 'green' : 'white',
+                                    borderColor: 'green',
+                                    marginRight: 10
+                                }]}
+                            >
+                                <Text style={{
+                                    color: chosenType === 'income' ? 'white' : 'green'
+                                }}>
+                                    Income
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => setChosenType('expense')}
+                                style={[styles.chosenTypeButton, {
+                                    backgroundColor: chosenType === 'expense' ? 'red' : 'white',
+                                    borderColor: 'red',
+                                    marginLeft: 10
+                                }]}
+                            >
+                                <Text style={{
+                                    color: chosenType === 'expense' ? 'white' : 'red'
+                                }}>
+                                    Expense
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{
+                            marginBottom: 10,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            width: '100%',
+                            overflow: 'hidden'
+                        }}>
+                            <Text style={{ fontSize: 16 }}>$</Text>
+                            <TextInput
+                                ref={textInputRef}
+                                keyboardType='number-pad'
+                                placeholder='0.00'
+                                value={addValueInput}
+                                onChangeText={(text) => setAddValueInput(text || undefined)}
+                                onBlur={() => {
+                                    if (addValueInput) {
+                                        const num = Number(addValueInput)
+                                        setAddValueInput(num.toFixed(2))
+                                        setAddedValue(num)
+                                    }
+                                    // if (addValueInput?.includes('.')) {
+                                    //     console.log('addValueInput has a dot');
+                                    // } else {
+                                    //     setAddValueInput(Number(addValueInput).toFixed(2))
+                                    // }
+                                }}
+                                style={{ width: '100%', borderBottomColor: '#ccc', borderBottomWidth: 1 }}
+                            />
+                        </View>
+                        <View style={{ width: '100%', }}>
+                            <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
+                                <Text style={{ color: 'orange' }}>Add</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCancelButton}>
+                                <Text style={{ color: 'red' }}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={{ width: '100%',  }}>
-                        <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
-                            <Text style={{ color: 'red' }}>Add</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCancelButton}>
-                            <Text style={{ color: 'red' }}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                </TouchableWithoutFeedback>
             </Modal>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>My Dashboard</Text>
