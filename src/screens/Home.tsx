@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { Dimensions, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useAppSelector } from '../redux/hooks';
 import { selectUserData } from '../redux/reducers/userSlice';
-import { PieChart } from 'react-native-chart-kit'
-import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
+// import { PieChart } from 'react-native-chart-kit'
+// import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
+import { PieChart, PieChartData } from 'react-native-svg-charts'
 
 const chartConfig = {
     backgroundColor: '#022173',
@@ -33,23 +34,46 @@ const Home = () => {
         // console.log('screenWidth / 2 - 220: ', (screenWidth / 2) - 110);
     }, [])
 
-    const generatePieData = () => {
+    const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+
+    const generatePieData = (): PieChartData[] => {
+        // for react-native-svg-charts
         return [
             {
-                name: 'Income',
-                population: income || 50,
-                color: '#ccc',
-                legendFontColor: '#ccc',
-                legendFontSize: 15
+                value: income || 50,
+                svg: {
+                    fill: randomColor(),
+                    onPress: () => { }
+                },
+                key: `income`
             },
             {
-                name: 'Spendings',
-                population: spendings || 50,
-                color: 'red',
-                legendFontColor: 'red',
-                legendFontSize: 15
-            }
+                value: spendings || 50,
+                svg: {
+                    fill: randomColor(),
+                    onPress: () => { }
+                },
+                key: `spendings`
+            },
         ]
+
+        // for react-native-chart-kit
+        // return [
+        //     {
+        //         name: 'Income',
+        //         population: income || 50,
+        //         color: '#ccc',
+        //         legendFontColor: '#ccc',
+        //         legendFontSize: 15
+        //     },
+        //     {
+        //         name: 'Spendings',
+        //         population: spendings || 50,
+        //         color: 'red',
+        //         legendFontColor: 'red',
+        //         legendFontSize: 15
+        //     }
+        // ]
     }
 
     return (
@@ -60,7 +84,14 @@ const Home = () => {
             <View style={styles.mainContainer}>
                 <Text>Income: ${income}</Text>
                 <Text>Spendings: ${spendings}</Text>
-                <PieChart
+                <View style={{ marginTop: 20 }}>
+                    <PieChart
+                        data={generatePieData()}
+                        style={{ height: 200, width: 200 }}
+                        innerRadius='75%'
+                    />
+                </View>
+                {/* <PieChart
                     data={generatePieData()}
                     chartConfig={chartConfig}
                     width={screenWidth - 40}
@@ -68,7 +99,7 @@ const Home = () => {
                     accessor='population'
                     backgroundColor='transparent'
                     paddingLeft='0'
-                />
+                /> */}
             </View>
 
         </View>
