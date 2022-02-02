@@ -3,7 +3,7 @@ import { RootState } from "../store"
 
 interface UserData {
     income: number,
-    spendings: number
+    expenses: number
 }
 
 interface UserDataState {
@@ -13,7 +13,7 @@ interface UserDataState {
 const initialState: UserDataState = {
     user: {
         income: 0,
-        spendings: 0
+        expenses: 0
     }
 }
 

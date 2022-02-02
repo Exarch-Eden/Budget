@@ -9,7 +9,7 @@ import { PieChart, PieChartData } from 'react-native-svg-charts'
 type ChosenMonetaryType = 'income' | 'expense'
 
 const Home = () => {
-    const { income, spendings } = useAppSelector(selectUserData)
+    const { income, expenses } = useAppSelector(selectUserData)
     const dispatch = useAppDispatch()
 
     const [modalVisible, setModalVisible] = useState(false)
@@ -27,7 +27,7 @@ const Home = () => {
     const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
 
     const generatePieData = (): PieChartData[] => {
-        const bothBlank = !income && !spendings
+        const bothBlank = !income && !expenses
 
         // for react-native-svg-charts
         return [
@@ -40,7 +40,7 @@ const Home = () => {
                 key: `income`
             },
             {
-                value: bothBlank ? 50 : spendings,
+                value: bothBlank ? 50 : expenses,
                 svg: {
                     fill: randomColor(),
                     onPress: () => { }
@@ -57,12 +57,12 @@ const Home = () => {
 
         console.log('isIncome: ', isIncome);
         console.log('new income: ', isIncome ? income + addedValue : income);
-        console.log('new spendings: ', isIncome ? spendings : spendings + addedValue);
+        console.log('new spendings: ', isIncome ? expenses : expenses + addedValue);
         
 
         dispatch(setUserData({
             income: isIncome ? income + addedValue : income,
-            spendings: isIncome ? spendings : spendings + addedValue
+            expenses: isIncome ? expenses : expenses + addedValue
         }))
     }
 
@@ -181,7 +181,7 @@ const Home = () => {
             </View>
             <View style={styles.mainContainer}>
                 <Text>Income: ${income}</Text>
-                <Text>Spendings: ${spendings}</Text>
+                <Text>Expenses: ${expenses}</Text>
                 <View style={{ marginTop: 20 }}>
                     <PieChart
                         data={generatePieData()}
