@@ -1,27 +1,52 @@
 import React, { ClassAttributes, createRef, LegacyRef, useEffect, useRef, useState } from 'react';
-import { Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectUserData, setUserData } from '../redux/reducers/userSlice';
 // import { PieChart } from 'react-native-chart-kit'
 // import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
 import { PieChart, PieChartData } from 'react-native-svg-charts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { passInitialRender, selectInitialRender } from '../redux/reducers/activitySlice';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
 const Home = () => {
     const { income, expenses } = useAppSelector(selectUserData)
+    // used to retrieve local user data when user initially boots app
+    const initialRender = useAppSelector(selectInitialRender)
     const dispatch = useAppDispatch()
 
     const [modalVisible, setModalVisible] = useState(false)
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
     const [addedValue, setAddedValue] = useState(0)
     const [addValueInput, setAddValueInput] = useState<string | undefined>()
+    const [loading, setLoading] = useState(true)
 
     const textInputRef = createRef<TextInput>()
+
+    const retrieveLocalData = async () => {
+        try {
+            console.log('retrieving async storage data...');
+            const localUserData = await AsyncStorage.getItem('@userData')
+            console.log('localUserData: ', localUserData);
+            
+            if (localUserData)
+                dispatch(setUserData(JSON.parse(localUserData)))
+            
+        } catch (error) {
+            console.error(error);
+        }
+        dispatch(passInitialRender())
+        setLoading(false)
+    }
 
     useEffect(() => {
         // TODO: get user data from asyncstorage
         // and set redux user data
+        if (initialRender) {
+            console.log('app just launched');
+            retrieveLocalData()
+        }
     }, [])
 
     const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
@@ -50,7 +75,7 @@ const Home = () => {
         ]
     }
 
-    const modalAddButtonOnPress = () => {
+    const modalAddButtonOnPress = async () => {
         console.log('modalAddButton()');
 
         const isIncome = chosenType === 'income'
@@ -59,11 +84,15 @@ const Home = () => {
         console.log('new income: ', isIncome ? income + addedValue : income);
         console.log('new spendings: ', isIncome ? expenses : expenses + addedValue);
         
-
-        dispatch(setUserData({
+        const newUserData = {
             income: isIncome ? income + addedValue : income,
             expenses: isIncome ? expenses : expenses + addedValue
-        }))
+        }
+
+        dispatch(setUserData(newUserData))
+
+        // save to local async storage
+        await AsyncStorage.setItem('@userData', JSON.stringify(newUserData))
     }
 
     return (
@@ -193,6 +222,11 @@ const Home = () => {
             <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
             </TouchableOpacity>
+            {
+                loading && <View style={styles.loader}>
+                    <ActivityIndicator size='large' color='#ccc' />
+                </View>
+            }
         </View>
     )
 };
@@ -248,6 +282,14 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         alignItems: 'center'
     },
+    loader: {
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        height: '100%',
+        width: '100%'
+    }
 })
 
 export default Home;
