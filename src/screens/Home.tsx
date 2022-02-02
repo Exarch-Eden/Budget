@@ -59,7 +59,7 @@ const Home = () => {
             {
                 value: bothBlank ? 50 : income,
                 svg: {
-                    fill: randomColor(),
+                    fill: 'green',
                     onPress: () => { }
                 },
                 key: `income`
@@ -67,7 +67,7 @@ const Home = () => {
             {
                 value: bothBlank ? 50 : expenses,
                 svg: {
-                    fill: randomColor(),
+                    fill: 'red',
                     onPress: () => { }
                 },
                 key: `spendings`
@@ -97,6 +97,7 @@ const Home = () => {
 
     return (
         <View style={styles.container as ViewStyle}>
+            {/* TODO: create a generic modal component */}
             <Modal visible={modalVisible} transparent>
                 <TouchableWithoutFeedback
                     onPress={() => setModalVisible(false)}
