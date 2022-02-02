@@ -20,6 +20,7 @@ const Home = () => {
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
     const [addedValue, setAddedValue] = useState(0)
     const [addValueInput, setAddValueInput] = useState<string | undefined>()
+    const [addValInputIsBlurred, setAddValInputIsBlurred] = useState(true)
     const [loading, setLoading] = useState(true)
 
     const textInputRef = createRef<TextInput>()
@@ -29,10 +30,10 @@ const Home = () => {
             console.log('retrieving async storage data...');
             const localUserData = await AsyncStorage.getItem('@userData')
             console.log('localUserData: ', localUserData);
-            
+
             if (localUserData)
                 dispatch(setUserData(JSON.parse(localUserData)))
-            
+
         } catch (error) {
             console.error(error);
         }
@@ -76,23 +77,35 @@ const Home = () => {
     }
 
     const modalAddButtonOnPress = async () => {
-        console.log('modalAddButton()');
+        try {
 
-        const isIncome = chosenType === 'income'
+            console.log('modalAddButton()');
+            console.log('addValInputIsBlurred: ', addValInputIsBlurred);
+            
+            const valToUse = addValInputIsBlurred ? addedValue : Number(addValueInput)
 
-        console.log('isIncome: ', isIncome);
-        console.log('new income: ', isIncome ? income + addedValue : income);
-        console.log('new spendings: ', isIncome ? expenses : expenses + addedValue);
-        
-        const newUserData = {
-            income: isIncome ? income + addedValue : income,
-            expenses: isIncome ? expenses : expenses + addedValue
+            if (!setAddValInputIsBlurred)
+                textInputRef.current?.blur()
+
+            const isIncome = chosenType === 'income'
+
+            console.log('isIncome: ', isIncome);
+            console.log('new income: ', isIncome ? income + valToUse : income);
+            console.log('new spendings: ', isIncome ? expenses : expenses + valToUse);
+
+            const newUserData = {
+                income: isIncome ? income + valToUse : income,
+                expenses: isIncome ? expenses : expenses + valToUse
+            }
+
+            dispatch(setUserData(newUserData))
+
+            // save to local async storage
+            await AsyncStorage.setItem('@userData', JSON.stringify(newUserData))
+        } catch (error) {
+            console.log('Error occurred in modalAddButtonOnPress()');
+            console.error(error);
         }
-
-        dispatch(setUserData(newUserData))
-
-        // save to local async storage
-        await AsyncStorage.setItem('@userData', JSON.stringify(newUserData))
     }
 
     return (
@@ -181,6 +194,7 @@ const Home = () => {
                                 value={addValueInput}
                                 onChangeText={(text) => setAddValueInput(text || undefined)}
                                 onBlur={() => {
+                                    setAddValInputIsBlurred(true)
                                     if (addValueInput) {
                                         const num = Number(addValueInput)
                                         setAddValueInput(num.toFixed(2))
@@ -192,6 +206,7 @@ const Home = () => {
                                     //     setAddValueInput(Number(addValueInput).toFixed(2))
                                     // }
                                 }}
+                                onFocus={() => setAddValInputIsBlurred(false)}
                                 style={{ width: '100%', borderBottomColor: '#ccc', borderBottomWidth: 1 }}
                             />
                         </View>
@@ -210,8 +225,8 @@ const Home = () => {
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
             <View style={styles.mainContainer}>
-                <Text>Income: ${income}</Text>
-                <Text>Expenses: ${expenses}</Text>
+                <Text>Income: ${income.toFixed(2)}</Text>
+                <Text>Expenses: ${expenses.toFixed(2)}</Text>
                 <View style={{ marginTop: 20 }}>
                     <PieChart
                         data={generatePieData()}
