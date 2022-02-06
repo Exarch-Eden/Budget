@@ -6,7 +6,7 @@ export interface MonetaryData {
     tag?: string
 }
 
-interface UserData {
+export interface UserData {
     // income: number,
     // expenses: number,
     income: MonetaryData[],

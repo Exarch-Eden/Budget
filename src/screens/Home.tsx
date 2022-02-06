@@ -1,12 +1,13 @@
 import React, { ClassAttributes, createRef, LegacyRef, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { MonetaryData, selectUserData, setUserData } from '../redux/reducers/userSlice';
+import { MonetaryData, selectUserData, setUserData, UserData } from '../redux/reducers/userSlice';
 // import { PieChart } from 'react-native-chart-kit'
 // import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
 import { PieChart, PieChartData } from 'react-native-svg-charts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { passInitialRender, selectInitialRender } from '../redux/reducers/activitySlice';
+import GenericModal from '../components/GenericModal';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -18,12 +19,16 @@ const Home = () => {
 
     const [totalIncome, setTotalIncome] = useState(0)
     const [totalExpenses, setTotalExpenses] = useState(0)
+
     const [modalVisible, setModalVisible] = useState(false)
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
     const [addedValue, setAddedValue] = useState(0)
     const [addValueInput, setAddValueInput] = useState<string | undefined>()
     const [addValInputIsBlurred, setAddValInputIsBlurred] = useState(true)
     const [selectedTag, setSelectedTag] = useState<string | undefined>()
+
+    const [tagModalVisible, setTagModalVisible] = useState(false)
+
     // set to false for testing
     // return to true later
     const [loading, setLoading] = useState(false)
@@ -43,8 +48,12 @@ const Home = () => {
             const localUserData = await AsyncStorage.getItem('@userData')
             console.log('localUserData: ', localUserData);
 
-            if (localUserData)
-                dispatch(setUserData(JSON.parse(localUserData)))
+            if (localUserData) {
+                const parsedLocalData: UserData = JSON.parse(localUserData)
+                dispatch(setUserData(parsedLocalData))
+                setTotalIncome(incomeExpenseReducer(parsedLocalData.income))
+                setTotalExpenses(incomeExpenseReducer(parsedLocalData.expenses))
+            }
 
         } catch (error) {
             console.error(error);
@@ -61,6 +70,9 @@ const Home = () => {
         if (initialRender) {
             console.log('app just launched');
             retrieveLocalData()
+        } else {
+            setTotalIncome(incomeExpenseReducer(income))
+            setTotalExpenses(incomeExpenseReducer(expenses))
         }
     }, [])
 
@@ -146,6 +158,12 @@ const Home = () => {
         }
     }
 
+    const addTag = (newTag: string) => {
+        console.log(`adding ${newTag} to tags array`);
+
+        dispatch(setUserData({ income, expenses, tags: tags ? [...tags, newTag] : [newTag] }))
+    }
+
     const renderTags = () => {
         // for testing purposes
         const tags = ['tag1', 'tag2']
@@ -157,7 +175,6 @@ const Home = () => {
                     onPress={() => selectedTag !== tag ? setSelectedTag(tag) : setSelectedTag(undefined)}
                 >
                     <Text
-                        key={tag}
                         style={{
                             backgroundColor: selectedTag === tag ? 'orange' : 'white',
                             borderWidth: 1,
@@ -173,131 +190,123 @@ const Home = () => {
                 </TouchableOpacity>
             )
         })
+            // the add button
+            .concat([(<TouchableOpacity
+                key={tags.length}
+                onPress={() => setTagModalVisible(true)}
+            >
+                <Text
+                    style={{
+                        backgroundColor: 'white',
+                        borderWidth: 1,
+                        borderColor: 'blue',
+                        padding: 5,
+                        paddingHorizontal: 10,
+                        borderRadius: 50,
+                        marginHorizontal: 5
+                    }}
+                >
+                    + Add
+                </Text>
+            </TouchableOpacity>)])
     }
 
     return (
         <View style={styles.container as ViewStyle}>
             {/* TODO: create a generic modal component */}
-            <Modal visible={modalVisible} transparent>
-                <TouchableWithoutFeedback
-                    onPress={() => setModalVisible(false)}
-                >
-                    <View
-                        style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            width: '100%',
-                            height: '100%'
-                            // height: Dimensions.get('screen').height * 0.4, opacity: 0.5
-                        }}
-                    >
+            <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
+                <Text>This is add tag modal</Text>
+            </GenericModal>
+            <GenericModal visible={modalVisible} setVisible={setModalVisible} contentOnPress={() => textInputRef.current?.blur()}>
+                <>
+                    <View>
+                        <Text>Add monetary value to calculation</Text>
                     </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => textInputRef.current?.blur()}>
+                    {/* Monetary Type */}
                     <View
                         style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            alignItems: 'center',
-                            borderTopRightRadius: 15,
-                            borderTopLeftRadius: 15,
-                            padding: 20,
-                            paddingTop: 30,
-                            backgroundColor: 'white',
-                            width: '100%',
-                            // height: Dimensions.get('screen').height * 0.6,
-                        }}
-                    >
-                        <View>
-                            <Text>Add monetary value to calculation</Text>
-                        </View>
-                        {/* Monetary Type */}
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                width: '100%',
-                                marginVertical: 10
-                            }}
-                        >
-                            <TouchableOpacity
-                                onPress={() => setChosenType('income')}
-                                style={[styles.chosenTypeButton, {
-                                    backgroundColor: chosenType === 'income' ? 'green' : 'white',
-                                    borderColor: 'green',
-                                    marginRight: 10
-                                }]}
-                            >
-                                <Text style={{
-                                    color: chosenType === 'income' ? 'white' : 'green'
-                                }}>
-                                    Income
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => setChosenType('expense')}
-                                style={[styles.chosenTypeButton, {
-                                    backgroundColor: chosenType === 'expense' ? 'red' : 'white',
-                                    borderColor: 'red',
-                                    marginLeft: 10
-                                }]}
-                            >
-                                <Text style={{
-                                    color: chosenType === 'expense' ? 'white' : 'red'
-                                }}>
-                                    Expense
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{
-                            marginBottom: 10,
                             flexDirection: 'row',
-                            alignItems: 'center',
                             width: '100%',
-                            overflow: 'hidden'
-                        }}>
-                            <Text style={{ fontSize: 16 }}>$</Text>
-                            <TextInput
-                                ref={textInputRef}
-                                keyboardType='number-pad'
-                                placeholder='0.00'
-                                value={addValueInput}
-                                onChangeText={(text) => setAddValueInput(text || undefined)}
-                                onBlur={() => {
-                                    setAddValInputIsBlurred(true)
-                                    if (addValueInput) {
-                                        const num = Number(addValueInput)
-                                        setAddValueInput(num.toFixed(2))
-                                        setAddedValue(num)
-                                    }
-                                    // if (addValueInput?.includes('.')) {
-                                    //     console.log('addValueInput has a dot');
-                                    // } else {
-                                    //     setAddValueInput(Number(addValueInput).toFixed(2))
-                                    // }
-                                }}
-                                onFocus={() => setAddValInputIsBlurred(false)}
-                                style={{ width: '100%', borderBottomColor: '#ccc', borderBottomWidth: 1 }}
-                            />
-                        </View>
-                        {/* Tag Selector */}
-                        <View style={{
-                            marginBottom: 10,
+                            marginVertical: 10
+                        }}
+                    >
+                        <TouchableOpacity
+                            onPress={() => setChosenType('income')}
+                            style={[styles.chosenTypeButton, {
+                                backgroundColor: chosenType === 'income' ? 'green' : 'white',
+                                borderColor: 'green',
+                                marginRight: 10
+                            }]}
+                        >
+                            <Text style={{
+                                color: chosenType === 'income' ? 'white' : 'green'
+                            }}>
+                                Income
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => setChosenType('expense')}
+                            style={[styles.chosenTypeButton, {
+                                backgroundColor: chosenType === 'expense' ? 'red' : 'white',
+                                borderColor: 'red',
+                                marginLeft: 10
+                            }]}
+                        >
+                            <Text style={{
+                                color: chosenType === 'expense' ? 'white' : 'red'
+                            }}>
+                                Expense
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{
+                        marginBottom: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: '100%',
+                        overflow: 'hidden'
+                    }}>
+                        <Text style={{ fontSize: 16 }}>$</Text>
+                        <TextInput
+                            ref={textInputRef}
+                            keyboardType='number-pad'
+                            placeholder='0.00'
+                            value={addValueInput}
+                            onChangeText={(text) => setAddValueInput(text || undefined)}
+                            onBlur={() => {
+                                setAddValInputIsBlurred(true)
+                                if (addValueInput) {
+                                    const num = Number(addValueInput)
+                                    setAddValueInput(num.toFixed(2))
+                                    setAddedValue(num)
+                                }
+                                // if (addValueInput?.includes('.')) {
+                                //     console.log('addValueInput has a dot');
+                                // } else {
+                                //     setAddValueInput(Number(addValueInput).toFixed(2))
+                                // }
+                            }}
+                            onFocus={() => setAddValInputIsBlurred(false)}
+                            style={{ width: '100%', borderBottomColor: '#ccc', borderBottomWidth: 1 }}
+                        />
+                    </View>
+                    {/* Tag Selector */}
+                    <View style={{
+                        marginBottom: 10,
 
-                        }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                {renderTags()}
-                            </View>
-                        </View>
-                        <View style={{ width: '100%', }}>
-                            <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
-                                <Text style={{ color: 'orange' }}>Add</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCancelButton}>
-                                <Text style={{ color: 'red' }}>Cancel</Text>
-                            </TouchableOpacity>
+                    }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text>Select an existing tag:</Text>
+                            {renderTags()}
                         </View>
                     </View>
-                </TouchableWithoutFeedback>
-            </Modal>
+                    <View style={{ width: '100%', }}>
+                        <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
+                            <Text style={{ color: 'orange' }}>Add</Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
+            </GenericModal>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
