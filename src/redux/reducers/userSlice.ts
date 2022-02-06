@@ -1,9 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../store"
 
+export interface MonetaryData {
+    value: number,
+    tag?: string
+}
+
 interface UserData {
-    income: number,
-    expenses: number
+    // income: number,
+    // expenses: number,
+    income: MonetaryData[],
+    expenses: MonetaryData[],
+    tags?: string[]
 }
 
 interface UserDataState {
@@ -12,8 +20,10 @@ interface UserDataState {
 
 const initialState: UserDataState = {
     user: {
-        income: 0,
-        expenses: 0
+        income: [],
+        expenses: []
+        // income: 0,
+        // expenses: 0
     }
 }
 

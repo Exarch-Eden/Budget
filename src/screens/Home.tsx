@@ -1,7 +1,7 @@
 import React, { ClassAttributes, createRef, LegacyRef, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectUserData, setUserData } from '../redux/reducers/userSlice';
+import { MonetaryData, selectUserData, setUserData } from '../redux/reducers/userSlice';
 // import { PieChart } from 'react-native-chart-kit'
 // import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
 import { PieChart, PieChartData } from 'react-native-svg-charts'
@@ -11,22 +11,34 @@ import { passInitialRender, selectInitialRender } from '../redux/reducers/activi
 type ChosenMonetaryType = 'income' | 'expense'
 
 const Home = () => {
-    const { income, expenses } = useAppSelector(selectUserData)
+    const { income, expenses, tags } = useAppSelector(selectUserData)
     // used to retrieve local user data when user initially boots app
     const initialRender = useAppSelector(selectInitialRender)
     const dispatch = useAppDispatch()
 
+    const [totalIncome, setTotalIncome] = useState(0)
+    const [totalExpenses, setTotalExpenses] = useState(0)
     const [modalVisible, setModalVisible] = useState(false)
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
     const [addedValue, setAddedValue] = useState(0)
     const [addValueInput, setAddValueInput] = useState<string | undefined>()
     const [addValInputIsBlurred, setAddValInputIsBlurred] = useState(true)
-    const [loading, setLoading] = useState(true)
+    const [selectedTag, setSelectedTag] = useState<string | undefined>()
+    // set to false for testing
+    // return to true later
+    const [loading, setLoading] = useState(false)
 
     const textInputRef = createRef<TextInput>()
 
     const retrieveLocalData = async () => {
         try {
+            // for purging old data (after changing data schema)
+            // console.log('purging old user data...');
+
+            // await AsyncStorage.setItem('@userData', '')
+
+            // throw new Error('Finished purging old data...')
+
             console.log('retrieving async storage data...');
             const localUserData = await AsyncStorage.getItem('@userData')
             console.log('localUserData: ', localUserData);
@@ -42,6 +54,8 @@ const Home = () => {
     }
 
     useEffect(() => {
+        console.log('initial useEffect()');
+
         // TODO: get user data from asyncstorage
         // and set redux user data
         if (initialRender) {
@@ -50,15 +64,32 @@ const Home = () => {
         }
     }, [])
 
+    useEffect(() => {
+        if (!modalVisible) {
+            setSelectedTag(undefined)
+        }
+    }, [modalVisible])
+
     const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
 
+    const incomeExpenseReducer = (arr: MonetaryData[]): number => {
+        if (arr.length === 0) return 0
+
+        return arr.reduce((prevIncome, curIncome) => {
+            return {
+                value: prevIncome.value + curIncome.value
+            }
+        }).value
+    }
+
     const generatePieData = (): PieChartData[] => {
-        const bothBlank = !income && !expenses
+        const bothBlank = income.length === 0 && expenses.length === 0
+        // const bothBlank = !income && !expenses
 
         // for react-native-svg-charts
         return [
             {
-                value: bothBlank ? 50 : income,
+                value: bothBlank ? 50 : incomeExpenseReducer(income),
                 svg: {
                     fill: 'green',
                     onPress: () => { }
@@ -66,7 +97,7 @@ const Home = () => {
                 key: `income`
             },
             {
-                value: bothBlank ? 50 : expenses,
+                value: bothBlank ? 50 : incomeExpenseReducer(expenses),
                 svg: {
                     fill: 'red',
                     onPress: () => { }
@@ -81,7 +112,7 @@ const Home = () => {
 
             console.log('modalAddButton()');
             console.log('addValInputIsBlurred: ', addValInputIsBlurred);
-            
+
             const valToUse = addValInputIsBlurred ? addedValue : Number(addValueInput)
 
             if (!setAddValInputIsBlurred)
@@ -89,14 +120,21 @@ const Home = () => {
 
             const isIncome = chosenType === 'income'
 
-            console.log('isIncome: ', isIncome);
-            console.log('new income: ', isIncome ? income + valToUse : income);
-            console.log('new spendings: ', isIncome ? expenses : expenses + valToUse);
+            setTotalIncome(isIncome ? totalIncome + valToUse : totalIncome)
+            setTotalExpenses(isIncome ? totalExpenses : totalExpenses + valToUse)
+
+            const dataToAdd = { value: valToUse, tag: selectedTag }
 
             const newUserData = {
-                income: isIncome ? income + valToUse : income,
-                expenses: isIncome ? expenses : expenses + valToUse
+                income: isIncome ? [...income, dataToAdd] : income,
+                expenses: isIncome ? expenses : [...expenses, dataToAdd]
+                // income: isIncome ? income + valToUse : income,
+                // expenses: isIncome ? expenses : expenses + valToUse
             }
+
+            console.log('isIncome: ', isIncome);
+            console.log('new income: ', newUserData.income);
+            console.log('new expenses: ', newUserData.expenses);
 
             dispatch(setUserData(newUserData))
 
@@ -106,6 +144,35 @@ const Home = () => {
             console.log('Error occurred in modalAddButtonOnPress()');
             console.error(error);
         }
+    }
+
+    const renderTags = () => {
+        // for testing purposes
+        const tags = ['tag1', 'tag2']
+
+        return tags?.map((tag, index) => {
+            return (
+                <TouchableOpacity
+                    key={tag}
+                    onPress={() => selectedTag !== tag ? setSelectedTag(tag) : setSelectedTag(undefined)}
+                >
+                    <Text
+                        key={tag}
+                        style={{
+                            backgroundColor: selectedTag === tag ? 'orange' : 'white',
+                            borderWidth: 1,
+                            borderColor: selectedTag === tag ? 'transparent' : 'orange',
+                            padding: 5,
+                            paddingHorizontal: 10,
+                            borderRadius: 50,
+                            marginHorizontal: 5
+                        }}
+                    >
+                        {tag}
+                    </Text>
+                </TouchableOpacity>
+            )
+        })
     }
 
     return (
@@ -141,8 +208,9 @@ const Home = () => {
                         }}
                     >
                         <View>
-                            <Text>This is a modal</Text>
+                            <Text>Add monetary value to calculation</Text>
                         </View>
+                        {/* Monetary Type */}
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -210,6 +278,15 @@ const Home = () => {
                                 style={{ width: '100%', borderBottomColor: '#ccc', borderBottomWidth: 1 }}
                             />
                         </View>
+                        {/* Tag Selector */}
+                        <View style={{
+                            marginBottom: 10,
+
+                        }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                {renderTags()}
+                            </View>
+                        </View>
                         <View style={{ width: '100%', }}>
                             <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
                                 <Text style={{ color: 'orange' }}>Add</Text>
@@ -225,8 +302,8 @@ const Home = () => {
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
             <View style={styles.mainContainer}>
-                <Text>Income: ${income.toFixed(2)}</Text>
-                <Text>Expenses: ${expenses.toFixed(2)}</Text>
+                <Text>Income: ${totalIncome.toFixed(2)}</Text>
+                <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
                 <View style={{ marginTop: 20 }}>
                     <PieChart
                         data={generatePieData()}
