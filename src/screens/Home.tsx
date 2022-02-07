@@ -28,6 +28,7 @@ const Home = () => {
     const [selectedTag, setSelectedTag] = useState<string | undefined>()
 
     const [tagModalVisible, setTagModalVisible] = useState(false)
+    const [addTagInput, setAddTagInput] = useState('')
 
     // set to false for testing
     // return to true later
@@ -81,6 +82,12 @@ const Home = () => {
             setSelectedTag(undefined)
         }
     }, [modalVisible])
+
+    useEffect(() => {
+        if (!tagModalVisible) {
+            setAddTagInput('')
+        }
+    }, [tagModalVisible])
 
     const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
 
@@ -158,20 +165,29 @@ const Home = () => {
         }
     }
 
-    const addTag = (newTag: string) => {
+    const addTag = async () => {
+        const newTag = addTagInput.trim()
+
         console.log(`adding ${newTag} to tags array`);
 
-        dispatch(setUserData({ income, expenses, tags: tags ? [...tags, newTag] : [newTag] }))
+        const newUserData = { income, expenses, tags: tags ? [...tags, newTag] : [newTag] }
+
+        dispatch(setUserData(newUserData))
+
+        // save to local async storageF
+        await AsyncStorage.setItem('@userData', JSON.stringify(newUserData))
+        
+        setTagModalVisible(false)
     }
 
     const renderTags = () => {
         // for testing purposes
-        const tags = ['tag1', 'tag2']
+        // const tags = ['tag1', 'tag2']
 
-        return tags?.map((tag, index) => {
+        const tagsElem = tags?.map((tag, index) => {
             return (
                 <TouchableOpacity
-                    key={tag}
+                    key={`#${tag}`}
                     onPress={() => selectedTag !== tag ? setSelectedTag(tag) : setSelectedTag(undefined)}
                 >
                     <Text
@@ -190,9 +206,12 @@ const Home = () => {
                 </TouchableOpacity>
             )
         })
+
+
+        return (tagsElem || [])
             // the add button
             .concat([(<TouchableOpacity
-                key={tags.length}
+                key='add'
                 onPress={() => setTagModalVisible(true)}
             >
                 <Text
@@ -215,7 +234,15 @@ const Home = () => {
         <View style={styles.container as ViewStyle}>
             {/* TODO: create a generic modal component */}
             <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
-                <Text>This is add tag modal</Text>
+                <>
+                    <Text style={{ marginBottom: 10 }}>Add a tag</Text>
+                    <TextInput placeholder='E.g. Salary' value={addTagInput} onChangeText={text => setAddTagInput(text)} />
+                    <View style={{ width: '100%' }}>
+                        <TouchableOpacity onPress={() => addTag()} style={styles.modalAddButton}>
+                            <Text style={{ color: 'orange' }}>Add</Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
             </GenericModal>
             <GenericModal visible={modalVisible} setVisible={setModalVisible} contentOnPress={() => textInputRef.current?.blur()}>
                 <>
@@ -293,10 +320,10 @@ const Home = () => {
                     {/* Tag Selector */}
                     <View style={{
                         marginBottom: 10,
-
+                        alignSelf: 'flex-start'
                     }}>
+                        <Text style={{ marginBottom: 5 }}>{tags ? 'Select an existing tag:' : 'You have no existing tags: '}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text>Select an existing tag:</Text>
                             {renderTags()}
                         </View>
                     </View>
