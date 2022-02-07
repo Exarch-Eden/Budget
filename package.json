@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^1.6.1",
     "@types/react-native-svg-charts": "^5.0.12",
     "@types/react-redux": "^7.1.18",
+    "moment": "^2.29.1",
     "react": "17.0.2",
     "react-native": "0.67.1",
     "react-native-chart-kit": "^6.11.0",
