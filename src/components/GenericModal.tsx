@@ -1,15 +1,24 @@
 import React, { FC } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 
 interface GenericModalProps {
     visible: boolean,
     setVisible: React.Dispatch<React.SetStateAction<boolean>>,
     closeModalButtonOnPress?: () => void,
     contentOnPress?: () => void,
+    flashMessageRef?: React.MutableRefObject<FlashMessage>,
     children?: JSX.Element
 }
 
-const GenericModal: FC<GenericModalProps> = ({ visible, setVisible, closeModalButtonOnPress, contentOnPress, children }) => {
+const GenericModal: FC<GenericModalProps> = ({
+    visible,
+    setVisible,
+    closeModalButtonOnPress,
+    contentOnPress,
+    flashMessageRef,
+    children
+}) => {
     return <Modal visible={visible} transparent>
         <TouchableWithoutFeedback
             onPress={() => setVisible(false)}
@@ -17,6 +26,9 @@ const GenericModal: FC<GenericModalProps> = ({ visible, setVisible, closeModalBu
             <View
                 style={styles.overlay}
             >
+                {/* Used for instances where the modal is active and you want a message to 
+                display over the 0.5 opacity overlay */}
+                <FlashMessage ref={flashMessageRef} position="top" />
             </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback disabled={!contentOnPress} onPress={contentOnPress}>

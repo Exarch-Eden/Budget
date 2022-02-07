@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from './src/screens/Home';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
+import FlashMessage from 'react-native-flash-message';
 
 const App = () => {
     const Stack = createStackNavigator()
@@ -18,6 +19,7 @@ const App = () => {
                 }}>
                     <Stack.Screen name='Home' component={MainBottomTab} />
                 </Stack.Navigator>
+                <FlashMessage position='top' />
             </NavigationContainer>
         </Provider>
     )
