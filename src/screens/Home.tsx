@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { passInitialRender, selectInitialRender } from '../redux/reducers/activitySlice';
 import GenericModal from '../components/GenericModal';
 import moment from 'moment'
+import HELPERS from '../helpers'
+import FlashMessage from 'react-native-flash-message';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -21,6 +23,7 @@ const Home = () => {
     const [totalIncome, setTotalIncome] = useState(0)
     const [totalExpenses, setTotalExpenses] = useState(0)
 
+    const modalFlashRef = useRef<FlashMessage>(null!)
     const [modalVisible, setModalVisible] = useState(false)
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
     const [addedValue, setAddedValue] = useState(0)
@@ -81,6 +84,8 @@ const Home = () => {
     useEffect(() => {
         if (!modalVisible) {
             setSelectedTag(undefined)
+            setAddValueInput('')
+            setAddedValue(0)
         }
     }, [modalVisible])
 
@@ -129,8 +134,10 @@ const Home = () => {
 
     const modalAddButtonOnPress = async () => {
         try {
-
             console.log('modalAddButton()');
+
+            if (!addValueInput && !addedValue) throw new Error('Amount field cannot be left blank')
+
             console.log('addValInputIsBlurred: ', addValInputIsBlurred);
 
             const valToUse = addValInputIsBlurred ? addedValue : Number(addValueInput)
@@ -164,10 +171,21 @@ const Home = () => {
         } catch (error) {
             console.log('Error occurred in modalAddButtonOnPress()');
             console.error(error);
+
+            if (error instanceof Error) {
+                console.log('error instanceof Error true');
+                modalFlashRef.current?.showMessage({
+                    message: error.message,
+                    duration: 5000,
+                    type: 'danger'
+                })
+            }
         }
     }
 
     const addTag = async () => {
+        // TODO: account for duplicate tags
+
         const newTag = addTagInput.trim()
 
         console.log(`adding ${newTag} to tags array`);
@@ -245,7 +263,12 @@ const Home = () => {
                     </View>
                 </>
             </GenericModal>
-            <GenericModal visible={modalVisible} setVisible={setModalVisible} contentOnPress={() => textInputRef.current?.blur()}>
+            <GenericModal
+                visible={modalVisible}
+                setVisible={setModalVisible}
+                contentOnPress={() => textInputRef.current?.blur()}
+                flashMessageRef={modalFlashRef}
+            >
                 <>
                     <View>
                         <Text>Add monetary value to calculation</Text>
