@@ -2,17 +2,18 @@ import React, { ClassAttributes, createRef, LegacyRef, useEffect, useRef, useSta
 import { ActivityIndicator, Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { MonetaryData, selectUserData, setUserData, UserData } from '../redux/reducers/userSlice';
-// import { PieChart } from 'react-native-chart-kit'
-// import { PieChartProps } from 'react-native-chart-kit/dist/PieChart'
 import { PieChart, PieChartData } from 'react-native-svg-charts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { passInitialRender, selectInitialRender } from '../redux/reducers/activitySlice';
 import GenericModal from '../components/GenericModal';
+import moment from 'moment'
 
 type ChosenMonetaryType = 'income' | 'expense'
 
 const Home = () => {
-    const { income, expenses, tags } = useAppSelector(selectUserData)
+    // const { income, expenses, tags } = useAppSelector(selectUserData)
+    const userData = useAppSelector(selectUserData)
+    const { income, expenses, tags } = userData
     // used to retrieve local user data when user initially boots app
     const initialRender = useAppSelector(selectInitialRender)
     const dispatch = useAppDispatch()
@@ -142,11 +143,12 @@ const Home = () => {
             setTotalIncome(isIncome ? totalIncome + valToUse : totalIncome)
             setTotalExpenses(isIncome ? totalExpenses : totalExpenses + valToUse)
 
-            const dataToAdd = { value: valToUse, tag: selectedTag }
+            const dataToAdd = { value: valToUse, tag: selectedTag, timestamp: moment().valueOf() }
 
             const newUserData = {
+                ...userData,
                 income: isIncome ? [...income, dataToAdd] : income,
-                expenses: isIncome ? expenses : [...expenses, dataToAdd]
+                expenses: isIncome ? expenses : [...expenses, dataToAdd],
                 // income: isIncome ? income + valToUse : income,
                 // expenses: isIncome ? expenses : expenses + valToUse
             }
@@ -170,13 +172,13 @@ const Home = () => {
 
         console.log(`adding ${newTag} to tags array`);
 
-        const newUserData = { income, expenses, tags: tags ? [...tags, newTag] : [newTag] }
+        const newUserData = { ...userData, tags: tags ? [...tags, newTag] : [newTag] }
 
         dispatch(setUserData(newUserData))
 
         // save to local async storageF
         await AsyncStorage.setItem('@userData', JSON.stringify(newUserData))
-        
+
         setTagModalVisible(false)
     }
 
@@ -232,7 +234,6 @@ const Home = () => {
 
     return (
         <View style={styles.container as ViewStyle}>
-            {/* TODO: create a generic modal component */}
             <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
                 <>
                     <Text style={{ marginBottom: 10 }}>Add a tag</Text>

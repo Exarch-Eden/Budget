@@ -3,7 +3,9 @@ import { RootState } from "../store"
 
 export interface MonetaryData {
     value: number,
-    tag?: string
+    // TODO: add support for multiple tags
+    tag?: string,
+    timestamp?: number
 }
 
 export interface UserData {
