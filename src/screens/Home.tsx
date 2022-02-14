@@ -1,14 +1,17 @@
 import React, { ClassAttributes, createRef, LegacyRef, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Dimensions, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { MonetaryData, selectUserData, setUserData, UserData } from '../redux/reducers/userSlice';
+import { ActivityIndicator, Dimensions, Keyboard, Modal, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
 import { PieChart, PieChartData } from 'react-native-svg-charts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import FlashMessage from 'react-native-flash-message';
+import moment from 'moment'
+
+import Text from '../components/Text';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { MonetaryData, selectUserData, setUserData, UserData } from '../redux/reducers/userSlice';
 import { passInitialRender, selectInitialRender } from '../redux/reducers/activitySlice';
 import GenericModal from '../components/GenericModal';
-import moment from 'moment'
 import HELPERS from '../helpers'
-import FlashMessage from 'react-native-flash-message';
+import { STYLES } from '../styles'
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -251,7 +254,8 @@ const Home = () => {
     }
 
     return (
-        <View style={styles.container as ViewStyle}>
+        <View style={STYLES.page}>
+            {/* <View style={styles.container as ViewStyle}> */}
             <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
                 <>
                     <Text style={{ marginBottom: 10 }}>Add a tag</Text>
