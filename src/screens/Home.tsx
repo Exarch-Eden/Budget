@@ -4,6 +4,7 @@ import { PieChart, PieChartData } from 'react-native-svg-charts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlashMessage from 'react-native-flash-message';
 import moment from 'moment'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
 
 import Text from '../components/Text';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -11,10 +12,12 @@ import { MonetaryData, selectUserData, setUserData, UserData } from '../redux/re
 import { passInitialRender, selectInitialRender } from '../redux/reducers/activitySlice';
 import GenericModal from '../components/GenericModal';
 import HELPERS from '../helpers'
-import { STYLES } from '../styles'
+import { STYLES, THEME } from '../styles'
 import InfoCard from '../components/InfoCard';
 
 type ChosenMonetaryType = 'income' | 'expense'
+
+const deviceWidth = Dimensions.get('window').width
 
 const Home = () => {
     // const { income, expenses, tags } = useAppSelector(selectUserData)
@@ -43,6 +46,8 @@ const Home = () => {
     const [loading, setLoading] = useState(false)
 
     const textInputRef = createRef<TextInput>()
+
+    const [curInfoIndex, setCurInfoIndex] = useState(0)
 
     const retrieveLocalData = async () => {
         try {
@@ -254,20 +259,8 @@ const Home = () => {
             </TouchableOpacity>)])
     }
 
-    return (
-        <View style={STYLES.page}>
-            {/* <View style={styles.container as ViewStyle}> */}
-            <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
-                <>
-                    <Text style={{ marginBottom: 10 }}>Add a tag</Text>
-                    <TextInput placeholder='E.g. Salary' value={addTagInput} onChangeText={text => setAddTagInput(text)} />
-                    <View style={{ width: '100%' }}>
-                        <TouchableOpacity onPress={() => addTag()} style={styles.modalAddButton}>
-                            <Text style={{ color: 'orange' }}>Add</Text>
-                        </TouchableOpacity>
-                    </View>
-                </>
-            </GenericModal>
+    const addValueModal = () => {
+        return (
             <GenericModal
                 visible={modalVisible}
                 setVisible={setModalVisible}
@@ -363,10 +356,12 @@ const Home = () => {
                     </View>
                 </>
             </GenericModal>
-            <View style={styles.headerContainer}>
-                <Text style={styles.header}>My Dashboard</Text>
-            </View>
-            <InfoCard customStyle={{ }}>
+        )
+    }
+
+    const renderInfoSlides = ({ item }: { item: any }) => {
+        return (
+            <InfoCard customStyle={{}}>
                 <View style={styles.mainContainer}>
                     <Text>Income: ${totalIncome.toFixed(2)}</Text>
                     <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
@@ -379,6 +374,68 @@ const Home = () => {
                     </View>
                 </View>
             </InfoCard>
+        )
+    }
+
+    return (
+        <View style={[STYLES.page, {paddingBottom: 10}]}>
+            {/* <View style={styles.container as ViewStyle}> */}
+            <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
+                <>
+                    <Text style={{ marginBottom: 10 }}>Add a tag</Text>
+                    <TextInput placeholder='E.g. Salary' value={addTagInput} onChangeText={text => setAddTagInput(text)} />
+                    <View style={{ width: '100%' }}>
+                        <TouchableOpacity onPress={() => addTag()} style={styles.modalAddButton}>
+                            <Text style={{ color: 'orange' }}>Add</Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
+            </GenericModal>
+            {addValueModal()}
+            <View style={styles.headerContainer}>
+                <Text style={styles.header}>My Dashboard</Text>
+            </View>
+            {/* <InfoCard customStyle={{}}>
+                <View style={styles.mainContainer}>
+                    <Text>Income: ${totalIncome.toFixed(2)}</Text>
+                    <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
+                    <View style={{ marginTop: 20 }}>
+                        <PieChart
+                            data={generatePieData()}
+                            style={{ height: 200, width: 200 }}
+                            innerRadius='75%'
+                        />
+                    </View>
+                </View>
+            </InfoCard> */}
+            <Carousel
+                containerCustomStyle={{
+                    // flexGrow: 0,
+                    // width: '100%'
+
+                }}
+                sliderWidth={deviceWidth}
+                itemWidth={deviceWidth - 40}
+                data={[{}, {}]}
+                renderItem={renderInfoSlides}
+                loop={false}
+                enableMomentum={false}
+                lockScrollWhileSnapping
+                autoplay={false}
+                onSnapToItem={(index) => setCurInfoIndex(index)}
+            />
+            <Pagination
+                dotsLength={2}
+                activeDotIndex={curInfoIndex}
+                containerStyle={{
+                    // default padding is too large, override it with smaller value
+                    paddingTop: 10,
+                    paddingBottom: 0
+                }}
+                dotStyle={{
+                    backgroundColor: THEME.PRIMARY.Light
+                }}
+            />
             <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
             </TouchableOpacity>
