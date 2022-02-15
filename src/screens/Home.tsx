@@ -12,6 +12,7 @@ import { passInitialRender, selectInitialRender } from '../redux/reducers/activi
 import GenericModal from '../components/GenericModal';
 import HELPERS from '../helpers'
 import { STYLES } from '../styles'
+import InfoCard from '../components/InfoCard';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -365,17 +366,19 @@ const Home = () => {
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
-            <View style={styles.mainContainer}>
-                <Text>Income: ${totalIncome.toFixed(2)}</Text>
-                <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
-                <View style={{ marginTop: 20 }}>
-                    <PieChart
-                        data={generatePieData()}
-                        style={{ height: 200, width: 200 }}
-                        innerRadius='75%'
-                    />
+            <InfoCard customStyle={{ }}>
+                <View style={styles.mainContainer}>
+                    <Text>Income: ${totalIncome.toFixed(2)}</Text>
+                    <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
+                    <View style={{ marginTop: 20 }}>
+                        <PieChart
+                            data={generatePieData()}
+                            style={{ height: 200, width: 200 }}
+                            innerRadius='75%'
+                        />
+                    </View>
                 </View>
-            </View>
+            </InfoCard>
             <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
             </TouchableOpacity>
@@ -394,7 +397,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     headerContainer: {
-        marginVertical: 20
+        marginBottom: 20
     },
     header: {
         fontSize: 24,
@@ -443,6 +446,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
+        // TODO: change background color to fit theme
         backgroundColor: 'white',
         height: '100%',
         width: '100%'

@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: THEME.PRIMARY.Dark
+        backgroundColor: THEME.PRIMARY.Dark,
+        padding: 20
     },
     textNormal: {
         color: THEME.PRIMARY.Light,
