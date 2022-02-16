@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
     textNormal: {
         color: THEME.PRIMARY.Light,
         fontSize: 20,
+    },
+    textLarge: {
+        color: THEME.PRIMARY.Light,
+        fontSize: 24
     }
 })
 

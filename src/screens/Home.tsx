@@ -17,6 +17,11 @@ import InfoCard from '../components/InfoCard';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
+type InfoSlideType = 'spend' | 'all'
+interface InfoSlideData {
+    type: InfoSlideType
+}
+
 const deviceWidth = Dimensions.get('window').width
 
 const Home = () => {
@@ -48,6 +53,15 @@ const Home = () => {
     const textInputRef = createRef<TextInput>()
 
     const [curInfoIndex, setCurInfoIndex] = useState(0)
+
+    const INFO_SLIDES: InfoSlideData[] = [
+        {
+            type: 'spend'
+        },
+        {
+            type: 'all'
+        }
+    ]
 
     const retrieveLocalData = async () => {
         try {
@@ -359,26 +373,44 @@ const Home = () => {
         )
     }
 
-    const renderInfoSlides = ({ item }: { item: any }) => {
-        return (
-            <InfoCard customStyle={{}}>
-                <View style={styles.mainContainer}>
-                    <Text>Income: ${totalIncome.toFixed(2)}</Text>
-                    <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
-                    <View style={{ marginTop: 20 }}>
-                        <PieChart
-                            data={generatePieData()}
-                            style={{ height: 200, width: 200 }}
-                            innerRadius='75%'
-                        />
+    const renderInfoSlides = ({ item }: { item: InfoSlideData }) => {
+        let slideContent
+
+        switch (item.type) {
+            case 'spend':
+                slideContent = (
+                    <View>
+                        <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
+                        
                     </View>
-                </View>
+                )
+                break
+            case 'all':
+                slideContent = (
+                    <View style={styles.mainContainer}>
+                        <Text>Income: ${totalIncome.toFixed(2)}</Text>
+                        <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
+                        <View style={{ marginTop: 20 }}>
+                            <PieChart
+                                data={generatePieData()}
+                                style={{ height: 200, width: 200 }}
+                                innerRadius='75%'
+                            />
+                        </View>
+                    </View>
+                )
+                break
+        }
+
+        return (
+            <InfoCard>
+                {slideContent}
             </InfoCard>
         )
     }
 
     return (
-        <View style={[STYLES.page, {paddingBottom: 10}]}>
+        <View style={[STYLES.page, { paddingBottom: 10 }]}>
             {/* <View style={styles.container as ViewStyle}> */}
             <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
                 <>
@@ -416,7 +448,7 @@ const Home = () => {
                 }}
                 sliderWidth={deviceWidth}
                 itemWidth={deviceWidth - 40}
-                data={[{}, {}]}
+                data={INFO_SLIDES}
                 renderItem={renderInfoSlides}
                 loop={false}
                 enableMomentum={false}
@@ -436,9 +468,9 @@ const Home = () => {
                     backgroundColor: THEME.PRIMARY.Light
                 }}
             />
-            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+            {/* <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {
                 loading && <View style={styles.loader}>
                     <ActivityIndicator size='large' color='#ccc' />
