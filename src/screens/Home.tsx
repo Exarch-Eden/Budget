@@ -25,7 +25,6 @@ interface InfoSlideData {
 const deviceWidth = Dimensions.get('window').width
 
 const Home = () => {
-    // const { income, expenses, tags } = useAppSelector(selectUserData)
     const userData = useAppSelector(selectUserData)
     const { income, expenses, tags } = userData
     // used to retrieve local user data when user initially boots app
@@ -132,7 +131,6 @@ const Home = () => {
 
     const generatePieData = (): PieChartData[] => {
         const bothBlank = income.length === 0 && expenses.length === 0
-        // const bothBlank = !income && !expenses
 
         // for react-native-svg-charts
         return [
@@ -179,8 +177,6 @@ const Home = () => {
                 ...userData,
                 income: isIncome ? [...income, dataToAdd] : income,
                 expenses: isIncome ? expenses : [...expenses, dataToAdd],
-                // income: isIncome ? income + valToUse : income,
-                // expenses: isIncome ? expenses : expenses + valToUse
             }
 
             console.log('isIncome: ', isIncome);
@@ -427,25 +423,7 @@ const Home = () => {
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
-            {/* <InfoCard customStyle={{}}>
-                <View style={styles.mainContainer}>
-                    <Text>Income: ${totalIncome.toFixed(2)}</Text>
-                    <Text>Expenses: ${totalExpenses.toFixed(2)}</Text>
-                    <View style={{ marginTop: 20 }}>
-                        <PieChart
-                            data={generatePieData()}
-                            style={{ height: 200, width: 200 }}
-                            innerRadius='75%'
-                        />
-                    </View>
-                </View>
-            </InfoCard> */}
             <Carousel
-                containerCustomStyle={{
-                    // flexGrow: 0,
-                    // width: '100%'
-
-                }}
                 sliderWidth={deviceWidth}
                 itemWidth={deviceWidth - 40}
                 data={INFO_SLIDES}
@@ -468,9 +446,6 @@ const Home = () => {
                     backgroundColor: THEME.PRIMARY.Light
                 }}
             />
-            {/* <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-                <Text style={{ fontSize: 24, color: 'white' }}>+</Text>
-            </TouchableOpacity> */}
             {
                 loading && <View style={styles.loader}>
                     <ActivityIndicator size='large' color='#ccc' />
