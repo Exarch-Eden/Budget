@@ -28,7 +28,8 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^12.1.1",
     "react-native-svg-charts": "^5.4.0",
-    "react-redux": "^7.2.4"
+    "react-redux": "^7.2.4",
+    "victory-native": "^36.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
