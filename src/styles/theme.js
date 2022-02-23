@@ -9,6 +9,13 @@ const PRIMARY = {
 
 const SECONDARY = {
     Dark: '#3A343A',
+    Red: 'red',
+    // Red: '#E62929',
+    Green: '#4D8F68',
+    // Green: 'green',
+    // Green: '#49C27B',
+    Yellow: 'yellow'
+    // Yellow: '#EFBB1C'
 }
 
 export default {
