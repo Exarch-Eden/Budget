@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlashMessage from 'react-native-flash-message';
 import moment from 'moment'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
+import { Circle, Slice, VictoryChart, VictoryPie } from 'victory-native';
 
 import Text from '../components/Text';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -14,6 +15,7 @@ import GenericModal from '../components/GenericModal';
 import HELPERS from '../helpers'
 import { STYLES, THEME } from '../styles'
 import InfoCard from '../components/InfoCard';
+import Svg from 'react-native-svg';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -23,6 +25,7 @@ interface InfoSlideData {
 }
 
 const deviceWidth = Dimensions.get('window').width
+const INFO_HEADER_HEIGHT = STYLES.textLarge.fontSize + 2
 
 const Home = () => {
     const userData = useAppSelector(selectUserData)
@@ -59,6 +62,27 @@ const Home = () => {
         },
         {
             type: 'all'
+        }
+    ]
+
+
+    const AVERAGE_SPENDING = 200
+
+    const DUMMY_DATA = [
+        {
+            y: 1,
+            // color: THEME.SECONDARY.Green
+            color: THEME.PRIMARY.Green
+        },
+        {
+            y: 1,
+            // color: THEME.SECONDARY.Yellow
+            color: THEME.PRIMARY.Yellow
+        },
+        {
+            y: 1,
+            // color: THEME.SECONDARY.Red
+            color: THEME.PRIMARY.Red
         }
     ]
 
@@ -371,13 +395,70 @@ const Home = () => {
 
     const renderInfoSlides = ({ item }: { item: InfoSlideData }) => {
         let slideContent
+        const PIE_HEIGHT = 300
+        const PIE_WIDTH = 300
+        const PIE_RADIUS = 150
+        const PIE_INNER_RAD = PIE_RADIUS - 10
+
 
         switch (item.type) {
             case 'spend':
                 slideContent = (
                     <View>
                         <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
-                        
+                        <Svg style={{ height: PIE_HEIGHT, width: '100%', marginVertical: 20 }}>
+                            <VictoryPie
+                                animate={{ duration: 500 }}
+                                data={DUMMY_DATA}
+                                height={PIE_HEIGHT}
+                                width={PIE_WIDTH}
+                                radius={PIE_RADIUS}
+                                // radius={PIE_RADIUS}
+                                padAngle={0}
+                                standalone={false}
+                                innerRadius={PIE_INNER_RAD}
+                                // innerRadius={PIE_HEIGHT / 2 - 20}
+                                startAngle={-90}
+                                endAngle={90}
+                                labels={() => null}
+                                style={{
+                                    data: {
+                                        fill: ({ datum }) => datum.color,
+                                        opacity: 0.6
+                                    }
+                                }}
+                            />
+                            {/* TODO: add circle at the head of the slice (bar) */}
+                            <VictoryPie
+                                animate={{ duration: 500 }}
+                                data={[{ y: 1 }]}
+                                height={PIE_HEIGHT}
+                                width={PIE_WIDTH}
+                                radius={PIE_RADIUS}
+                                padAngle={0}
+                                standalone={false}
+                                innerRadius={PIE_INNER_RAD}
+                                startAngle={-90}
+                                endAngle={-60}
+                                labels={() => null}
+                                style={{
+                                    data: {
+                                        fill: THEME.PRIMARY.Green,
+
+                                    }
+                                }}
+                                // dataComponent={
+                                //     <>
+                                //         <Slice
+
+                                //             // style={{ fill: 'green' }}
+                                //         />
+                                //         {/* <Circle style={{ fill: 'green' }} /> */}
+                                //     </>
+                                // }
+                            />
+                        </Svg>
+                        <Text>Hi</Text>
                     </View>
                 )
                 break
