@@ -1,4 +1,4 @@
-const homeSvg = `
+export const homeSvg = `
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect width="32" height="32" fill="url(#pattern0)"/>
 <defs>
@@ -10,7 +10,7 @@ const homeSvg = `
 </svg>
 `
 
-const settingsSvg = `
+export const settingsSvg = `
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect width="32" height="32" fill="url(#pattern0)"/>
 <defs>
@@ -22,7 +22,7 @@ const settingsSvg = `
 </svg>
 `
 
-const addSvg = `
+export const addSvg = `
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect width="32" height="32" fill="url(#pattern0)"/>
 <defs>
