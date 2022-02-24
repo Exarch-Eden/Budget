@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator as createStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -8,6 +8,11 @@ import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import FlashMessage from 'react-native-flash-message';
 import { THEME } from './src/styles';
+import { homeSvg, addSvg, settingsSvg } from './src/assets/svgs/navigation'
+import { SvgXml } from 'react-native-svg';
+import GenericModal from './src/components/GenericModal';
+
+type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 
 const App = () => {
     const Stack = createStackNavigator()
@@ -31,13 +36,37 @@ const MainBottomTab = () => {
 
     return (
         <Tab.Navigator
-            screenOptions={{
+            screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarStyle: styles.tabBar,
-                tabBarShowLabel: false
-            }}
+                tabBarShowLabel: false,
+                tabBarIcon: ({ focused }) => {
+                    let iconSvg
+                    switch (route.name as TAB_NAMES) {
+                        case 'Dashboard':
+                            iconSvg = homeSvg
+                            break
+                        case 'Add':
+                            iconSvg = addSvg
+                            break
+                        default:
+                            iconSvg = settingsSvg
+                            break
+                    }
+
+                    return (
+                        <SvgXml xml={iconSvg} />
+                    )
+                }
+            })}
         >
             <Tab.Screen name='Dashboard' component={Home} />
+            <Tab.Screen name='Add' component={() => {
+                return (
+                    <GenericModal visible={false} setVisible={() => false} />
+                )
+            }} />
+            <Tab.Screen name='Setting' component={Home} />
         </Tab.Navigator>
     )
 }
