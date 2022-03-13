@@ -200,6 +200,7 @@ const Home = () => {
             setTotalIncome(isIncome ? totalIncome + valToUse : totalIncome)
             setTotalExpenses(isIncome ? totalExpenses : totalExpenses + valToUse)
 
+            // TODO: allow user to select date and time
             const dataToAdd = { value: valToUse, tag: selectedTag, timestamp: moment().valueOf() }
 
             const newUserData = {
@@ -406,12 +407,14 @@ const Home = () => {
         const PIE_INNER_RAD = PIE_RADIUS - 10
 
 
+        // TODO: Move each slide content into its own component
         switch (item.type) {
             case 'spend':
                 slideContent = (
                     <View>
                         <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
-                        <Svg style={{ height: PIE_HEIGHT, width: '100%', marginVertical: 20 }}>
+                        {/* Svg height is half of pie because we are only using the top half */}
+                        <Svg style={{ height: PIE_HEIGHT / 2, width: '100%', marginVertical: 20 }}>
                             <VictoryPie
                                 animate={{ duration: 500 }}
                                 data={DUMMY_DATA}
