@@ -122,6 +122,9 @@ const Home = () => {
     useEffect(() => {
         console.log('initial useEffect()');
 
+        console.log('expenses:\n', expenses);
+        
+
         // TODO: get user data from asyncstorage
         // and set redux user data
         if (initialRender) {
@@ -407,6 +410,13 @@ const Home = () => {
         const PIE_RADIUS = 150
         const PIE_INNER_RAD = PIE_RADIUS - 10
 
+        const curMonthlyExpenses = expenses
+            .filter(expense => 
+                expense.timestamp !== undefined &&
+                moment().year() === moment(expense.timestamp).year() &&
+                moment().month() === moment(expense.timestamp).month()
+            )
+
 
         // TODO: Move each slide content into its own component
         switch (item.type) {
@@ -423,11 +433,9 @@ const Home = () => {
                                 height={PIE_HEIGHT}
                                 width={PIE_WIDTH}
                                 radius={PIE_RADIUS}
-                                // radius={PIE_RADIUS}
                                 padAngle={2}
                                 standalone={false}
                                 innerRadius={PIE_INNER_RAD}
-                                // innerRadius={PIE_HEIGHT / 2 - 20}
                                 startAngle={-90}
                                 endAngle={90}
                                 labels={() => null}
@@ -449,7 +457,8 @@ const Home = () => {
                                 standalone={false}
                                 innerRadius={PIE_INNER_RAD}
                                 startAngle={-90}
-                                // modify endAngle value based on 
+                                // TODO: modify endAngle value based on average expense per previous months
+                                // if no previous months then calculate based on earnings vs expenses this month
                                 endAngle={spendEndAngle}
                                 labels={() => null}
                                 style={{
@@ -473,11 +482,34 @@ const Home = () => {
                             <View>
                                 {/* height of 32px is same height as svg filter icon on the right */}
                                 <Text style={{ height: 32, textAlignVertical: 'center' }}>Highest Monthly Expenses</Text>
-                                {/* TODO: insert render function for highest monthly expenses (category name; otherwise resort to name) */}
                             </View>
                             <View>
+                                {/* TODO: wrap svg in TouchableOpacity and allow filter for category/names */}
                                 <SvgXml xml={filterSvg} />
-                                {/* TODO: insert render function for highest monthly expenses (value) */}
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View>
+                            {
+                                curMonthlyExpenses.map((curExpense) => {
+                                    return (
+                                        <View key={curExpense.timestamp}>
+                                            <Text>{curExpense.tag}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
+                            </View>
+                            <View>
+                            {
+                                curMonthlyExpenses.map((curExpense) => {
+                                    return (
+                                        <View key={curExpense.timestamp}>
+                                            <Text>{curExpense.value}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                             </View>
                         </View>
                     </View>
