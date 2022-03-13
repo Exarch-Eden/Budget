@@ -37,6 +37,7 @@ const Home = () => {
     const [totalIncome, setTotalIncome] = useState(0)
     const [totalExpenses, setTotalExpenses] = useState(0)
 
+    // ref used to manually trigger flash message inside modal
     const modalFlashRef = useRef<FlashMessage>(null!)
     const [modalVisible, setModalVisible] = useState(false)
     const [chosenType, setChosenType] = useState<ChosenMonetaryType>('income')
@@ -47,6 +48,10 @@ const Home = () => {
 
     const [tagModalVisible, setTagModalVisible] = useState(false)
     const [addTagInput, setAddTagInput] = useState('')
+
+    // used to gauge monthly spending on Recent Spendings tab
+    // MUST be greater than -90
+    const [spendEndAngle, setSpendEndAngle] = useState(-89)
 
     // set to false for testing
     // return to true later
@@ -414,7 +419,7 @@ const Home = () => {
                                 width={PIE_WIDTH}
                                 radius={PIE_RADIUS}
                                 // radius={PIE_RADIUS}
-                                padAngle={0}
+                                padAngle={2}
                                 standalone={false}
                                 innerRadius={PIE_INNER_RAD}
                                 // innerRadius={PIE_HEIGHT / 2 - 20}
@@ -439,7 +444,8 @@ const Home = () => {
                                 standalone={false}
                                 innerRadius={PIE_INNER_RAD}
                                 startAngle={-90}
-                                endAngle={-60}
+                                // modify endAngle value based on 
+                                endAngle={spendEndAngle}
                                 labels={() => null}
                                 style={{
                                     data: {
