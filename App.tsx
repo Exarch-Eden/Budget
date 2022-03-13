@@ -31,6 +31,12 @@ const App = () => {
     )
 };
 
+const AddModal = () => {
+    return (
+        <GenericModal visible={false} setVisible={() => false} />
+    )
+}
+
 const MainBottomTab = () => {
     const Tab = createBottomTabNavigator()
 
@@ -61,11 +67,7 @@ const MainBottomTab = () => {
             })}
         >
             <Tab.Screen name='Dashboard' component={Home} />
-            <Tab.Screen name='Add' component={() => {
-                return (
-                    <GenericModal visible={false} setVisible={() => false} />
-                )
-            }} />
+            <Tab.Screen name='Add' component={AddModal}/>
             <Tab.Screen name='Setting' component={Home} />
         </Tab.Navigator>
     )
