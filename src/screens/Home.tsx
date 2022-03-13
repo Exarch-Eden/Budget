@@ -15,7 +15,8 @@ import GenericModal from '../components/GenericModal';
 import HELPERS from '../helpers'
 import { STYLES, THEME } from '../styles'
 import InfoCard from '../components/InfoCard';
-import Svg from 'react-native-svg';
+import Svg, { SvgXml } from 'react-native-svg';
+import { filterSvg } from '../assets/svgs';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -415,6 +416,7 @@ const Home = () => {
                         <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
                         {/* Svg height is half of pie because we are only using the top half */}
                         <Svg style={{ height: PIE_HEIGHT / 2, width: '100%', marginVertical: 20 }}>
+                            {/* TODO: add monthly expense amount in center of pie (in open space) */}
                             <VictoryPie
                                 animate={{ duration: 500 }}
                                 data={DUMMY_DATA}
@@ -467,7 +469,17 @@ const Home = () => {
                                 // }
                             />
                         </Svg>
-                        <Text>Hi</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View>
+                                {/* height of 32px is same height as svg filter icon on the right */}
+                                <Text style={{ height: 32, textAlignVertical: 'center' }}>Highest Monthly Expenses</Text>
+                                {/* TODO: insert render function for highest monthly expenses (category name; otherwise resort to name) */}
+                            </View>
+                            <View>
+                                <SvgXml xml={filterSvg} />
+                                {/* TODO: insert render function for highest monthly expenses (value) */}
+                            </View>
+                        </View>
                     </View>
                 )
                 break
