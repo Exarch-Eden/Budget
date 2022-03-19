@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlashMessage from 'react-native-flash-message';
 import moment from 'moment'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { Circle, Slice, VictoryChart, VictoryPie } from 'victory-native';
+import { Circle, Slice, VictoryAnimation, VictoryChart, VictoryLabel, VictoryPie } from 'victory-native';
 
 import Text from '../components/Text';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -178,6 +178,15 @@ const Home = () => {
                 moment().month() === moment(expense.timestamp).month()
             )
 
+            console.log('curMonthlyExpenses reduced value: ', curMonthlyExpenses.reduce(
+                (prev, cur) => {
+                    return {
+                        value: prev.value + cur.value
+                    }
+                }, {
+                    value: 0
+                }
+            ).value);
 
         // TODO: Move each slide content into its own component
         switch (item.type) {
@@ -252,6 +261,43 @@ const Home = () => {
                             //     </>
                             // }
                             />
+                            <VictoryAnimation
+                                duration={1000}
+                                data={{
+                                    target: curMonthlyExpenses.reduce(
+                                        (prev, cur) => {
+                                            return {
+                                                value: prev.value + cur.value
+                                            }
+                                        }, {
+                                            value: 0
+                                        }
+                                    ).value.toFixed(2)
+                                }}
+                            >
+                                {
+                                    (props) => {
+                                        return (
+                                            <VictoryLabel 
+                                                textAnchor='middle'
+                                                verticalAnchor='middle'
+                                                x={expenseViewWidth / 2}
+                                                // PIE_HEIGHT is divided by 4
+                                                // because desired height for half-pie
+                                                // has denumerator of 2; divide by 2 again
+                                                // to put the label in the middle of the half-pie
+                                                y={PIE_HEIGHT / 4}
+                                                text={`$${props.target}`}
+                                                style={{
+                                                    // changes text colour
+                                                    fill: THEME.PRIMARY.Light,
+                                                    fontSize: STYLES.textLarge.fontSize
+                                                }}
+                                            />
+                                        )
+                                    }
+                                }
+                            </VictoryAnimation>
                         </Svg>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View>
