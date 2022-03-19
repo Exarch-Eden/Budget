@@ -114,7 +114,7 @@ const Home = () => {
         console.log('initial useEffect()');
 
         console.log('expenses:\n', expenses);
-        
+
 
         // TODO: get user data from asyncstorage
         // and set redux user data
@@ -172,7 +172,7 @@ const Home = () => {
         const PIE_INNER_RAD = PIE_RADIUS - 10
 
         const curMonthlyExpenses = expenses
-            .filter(expense => 
+            .filter(expense =>
                 expense.timestamp !== undefined &&
                 moment().year() === moment(expense.timestamp).year() &&
                 moment().month() === moment(expense.timestamp).month()
@@ -183,15 +183,15 @@ const Home = () => {
         switch (item.type) {
             case 'spend':
                 slideContent = (
-                    <View 
+                    <View
                         onLayout={(e) => setExpenseViewWidth(e.nativeEvent.layout.width)}
                     >
                         <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
                         {/* Svg height is half of pie because we are only using the top half */}
-                        <Svg 
+                        <Svg
                             height={PIE_HEIGHT / 2}
                             width='100%'
-                            style={{ 
+                            style={{
                                 // height: PIE_HEIGHT / 2, 
                                 // width: '100%', 
                                 marginVertical: 20,
@@ -242,15 +242,15 @@ const Home = () => {
 
                                     }
                                 }}
-                                // dataComponent={
-                                //     <>
-                                //         <Slice
+                            // dataComponent={
+                            //     <>
+                            //         <Slice
 
-                                //             // style={{ fill: 'green' }}
-                                //         />
-                                //         {/* <Circle style={{ fill: 'green' }} /> */}
-                                //     </>
-                                // }
+                            //             // style={{ fill: 'green' }}
+                            //         />
+                            //         {/* <Circle style={{ fill: 'green' }} /> */}
+                            //     </>
+                            // }
                             />
                         </Svg>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -266,26 +266,26 @@ const Home = () => {
                         {/* TODO: group expenses with the same tag value (sum the expense value) */}
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                             <View>
-                            {
-                                curMonthlyExpenses.map((curExpense) => {
-                                    return (
-                                        <View key={curExpense.timestamp}>
-                                            <Text>{curExpense.tag}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
+                                {
+                                    curMonthlyExpenses.map((curExpense) => {
+                                        return (
+                                            <View key={curExpense.timestamp}>
+                                                <Text>{curExpense.tag}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
                             </View>
                             <View>
-                            {
-                                curMonthlyExpenses.map((curExpense) => {
-                                    return (
-                                        <View key={curExpense.timestamp}>
-                                            <Text>{curExpense.value.toFixed(2)}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
+                                {
+                                    curMonthlyExpenses.map((curExpense) => {
+                                        return (
+                                            <View key={curExpense.timestamp}>
+                                                <Text>{curExpense.value.toFixed(2)}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
                             </View>
                         </View>
                     </View>
