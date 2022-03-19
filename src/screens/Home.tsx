@@ -39,8 +39,13 @@ const Home = () => {
     const [totalExpenses, setTotalExpenses] = useState(0)
 
     // used to gauge monthly spending on Recent Spendings tab
-    // MUST be greater than -90
-    const [spendEndAngle, setSpendEndAngle] = useState(-89)
+    // MUST be greater than -90 and less than 90
+    // -89 is complete zero
+    // -88 is the smallest integer value where bar actually shows
+    const [spendEndAngle, setSpendEndAngle] = useState(-88)
+    // used to store the dynamically-calculated height of the parent view
+    // holding the pie charts so that said charts can match it
+    const [expenseViewWidth, setExpenseViewWidth] = useState(0)
 
     // set to false for testing
     // return to true later
@@ -161,7 +166,8 @@ const Home = () => {
     const renderInfoSlides = ({ item }: { item: InfoSlideData }) => {
         let slideContent
         const PIE_HEIGHT = 300
-        const PIE_WIDTH = 300
+        const PIE_WIDTH = deviceWidth
+        // const PIE_WIDTH = 300
         const PIE_RADIUS = 150
         const PIE_INNER_RAD = PIE_RADIUS - 10
 
@@ -177,16 +183,29 @@ const Home = () => {
         switch (item.type) {
             case 'spend':
                 slideContent = (
-                    <View>
+                    <View 
+                        onLayout={(e) => setExpenseViewWidth(e.nativeEvent.layout.width)}
+                    >
                         <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
                         {/* Svg height is half of pie because we are only using the top half */}
-                        <Svg style={{ height: PIE_HEIGHT / 2, width: '100%', marginVertical: 20 }}>
+                        <Svg 
+                            height={PIE_HEIGHT / 2}
+                            width='100%'
+                            style={{ 
+                                // height: PIE_HEIGHT / 2, 
+                                // width: '100%', 
+                                marginVertical: 20,
+                                // maxHeight: '100%',
+                                // maxWidth: '100%',
+                            }}
+                        >
                             {/* TODO: add monthly expense amount in center of pie (in open space) */}
                             <VictoryPie
                                 animate={{ duration: 500 }}
                                 data={DUMMY_DATA}
                                 height={PIE_HEIGHT}
-                                width={PIE_WIDTH}
+                                width={expenseViewWidth || PIE_WIDTH}
+                                // width={PIE_WIDTH}
                                 radius={PIE_RADIUS}
                                 padAngle={2}
                                 standalone={false}
@@ -206,12 +225,13 @@ const Home = () => {
                                 animate={{ duration: 500 }}
                                 data={[{ y: 1 }]}
                                 height={PIE_HEIGHT}
-                                width={PIE_WIDTH}
+                                width={expenseViewWidth || PIE_WIDTH}
+                                // width={PIE_WIDTH}
                                 radius={PIE_RADIUS}
                                 padAngle={0}
                                 standalone={false}
                                 innerRadius={PIE_INNER_RAD}
-                                startAngle={-90}
+                                startAngle={-89}
                                 // TODO: modify endAngle value based on average expense per previous months
                                 // if no previous months then calculate based on earnings vs expenses this month
                                 endAngle={spendEndAngle}
@@ -243,7 +263,8 @@ const Home = () => {
                                 <SvgXml xml={filterSvg} />
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        {/* TODO: group expenses with the same tag value (sum the expense value) */}
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                             <View>
                             {
                                 curMonthlyExpenses.map((curExpense) => {
