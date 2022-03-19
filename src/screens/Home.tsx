@@ -281,7 +281,7 @@ const Home = () => {
                                 curMonthlyExpenses.map((curExpense) => {
                                     return (
                                         <View key={curExpense.timestamp}>
-                                            <Text>{curExpense.value}</Text>
+                                            <Text>{curExpense.value.toFixed(2)}</Text>
                                         </View>
                                     )
                                 })
