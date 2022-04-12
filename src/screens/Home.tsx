@@ -17,6 +17,7 @@ import { STYLES, THEME } from '../styles'
 import InfoCard from '../components/InfoCard';
 import Svg, { SvgXml } from 'react-native-svg';
 import { filterSvg } from '../assets/svgs';
+import MonthlyExpenseSlide from '../components/home-slides/MonthlyExpenseSlide';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
@@ -35,6 +36,7 @@ const Home = () => {
     const initialRender = useAppSelector(selectInitialRender)
     const dispatch = useAppDispatch()
 
+    // TODO: bring back usability for other tab (currently not being used)
     const [totalIncome, setTotalIncome] = useState(0)
     const [totalExpenses, setTotalExpenses] = useState(0)
 
@@ -59,27 +61,6 @@ const Home = () => {
         },
         {
             type: 'all'
-        }
-    ]
-
-
-    const AVERAGE_SPENDING = 200
-
-    const DUMMY_DATA = [
-        {
-            y: 1,
-            // color: THEME.SECONDARY.Green
-            color: THEME.PRIMARY.Green
-        },
-        {
-            y: 1,
-            // color: THEME.SECONDARY.Yellow
-            color: THEME.PRIMARY.Yellow
-        },
-        {
-            y: 1,
-            // color: THEME.SECONDARY.Red
-            color: THEME.PRIMARY.Red
         }
     ]
 
@@ -165,12 +146,7 @@ const Home = () => {
 
     const renderInfoSlides = ({ item }: { item: InfoSlideData }) => {
         let slideContent
-        const PIE_HEIGHT = 300
-        const PIE_WIDTH = deviceWidth
-        // const PIE_WIDTH = 300
-        const PIE_RADIUS = 150
-        const PIE_INNER_RAD = PIE_RADIUS - 10
-
+       
         const curMonthlyExpenses = expenses
             .filter(expense =>
                 expense.timestamp !== undefined &&
@@ -192,149 +168,12 @@ const Home = () => {
         switch (item.type) {
             case 'spend':
                 slideContent = (
-                    <View
+                    <MonthlyExpenseSlide
                         onLayout={(e) => setExpenseViewWidth(e.nativeEvent.layout.width)}
-                    >
-                        <Text style={STYLES.textLarge} numberOfLines={1}>Recent Spendings</Text>
-                        {/* Svg height is half of pie because we are only using the top half */}
-                        <Svg
-                            height={PIE_HEIGHT / 2}
-                            width='100%'
-                            style={{
-                                // height: PIE_HEIGHT / 2, 
-                                // width: '100%', 
-                                marginVertical: 20,
-                                // maxHeight: '100%',
-                                // maxWidth: '100%',
-                            }}
-                        >
-                            {/* TODO: add monthly expense amount in center of pie (in open space) */}
-                            <VictoryPie
-                                animate={{ duration: 500 }}
-                                data={DUMMY_DATA}
-                                height={PIE_HEIGHT}
-                                width={expenseViewWidth || PIE_WIDTH}
-                                // width={PIE_WIDTH}
-                                radius={PIE_RADIUS}
-                                padAngle={2}
-                                standalone={false}
-                                innerRadius={PIE_INNER_RAD}
-                                startAngle={-90}
-                                endAngle={90}
-                                labels={() => null}
-                                style={{
-                                    data: {
-                                        fill: ({ datum }) => datum.color,
-                                        opacity: 0.6
-                                    }
-                                }}
-                            />
-                            {/* TODO: add circle at the head of the slice (bar) */}
-                            <VictoryPie
-                                animate={{ duration: 500 }}
-                                data={[{ y: 1 }]}
-                                height={PIE_HEIGHT}
-                                width={expenseViewWidth || PIE_WIDTH}
-                                // width={PIE_WIDTH}
-                                radius={PIE_RADIUS}
-                                padAngle={0}
-                                standalone={false}
-                                innerRadius={PIE_INNER_RAD}
-                                startAngle={-89}
-                                // TODO: modify endAngle value based on average expense per previous months
-                                // if no previous months then calculate based on earnings vs expenses this month
-                                endAngle={spendEndAngle}
-                                labels={() => null}
-                                style={{
-                                    data: {
-                                        fill: THEME.PRIMARY.Green,
-
-                                    }
-                                }}
-                            // dataComponent={
-                            //     <>
-                            //         <Slice
-
-                            //             // style={{ fill: 'green' }}
-                            //         />
-                            //         {/* <Circle style={{ fill: 'green' }} /> */}
-                            //     </>
-                            // }
-                            />
-                            <VictoryAnimation
-                                duration={1000}
-                                data={{
-                                    target: curMonthlyExpenses.reduce(
-                                        (prev, cur) => {
-                                            return {
-                                                value: prev.value + cur.value
-                                            }
-                                        }, {
-                                            value: 0
-                                        }
-                                    ).value.toFixed(2)
-                                }}
-                            >
-                                {
-                                    (props) => {
-                                        return (
-                                            <VictoryLabel 
-                                                textAnchor='middle'
-                                                verticalAnchor='middle'
-                                                x={expenseViewWidth / 2}
-                                                // PIE_HEIGHT is divided by 4
-                                                // because desired height for half-pie
-                                                // has denumerator of 2; divide by 2 again
-                                                // to put the label in the middle of the half-pie
-                                                y={PIE_HEIGHT / 4}
-                                                text={`$${props.target}`}
-                                                style={{
-                                                    // changes text colour
-                                                    fill: THEME.PRIMARY.Light,
-                                                    fontSize: STYLES.textLarge.fontSize
-                                                }}
-                                            />
-                                        )
-                                    }
-                                }
-                            </VictoryAnimation>
-                        </Svg>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View>
-                                {/* height of 32px is same height as svg filter icon on the right */}
-                                <Text style={{ height: 32, textAlignVertical: 'center' }}>Highest Monthly Expenses</Text>
-                            </View>
-                            <View>
-                                {/* TODO: wrap svg in TouchableOpacity and allow filter for category/names */}
-                                <SvgXml xml={filterSvg} />
-                            </View>
-                        </View>
-                        {/* TODO: group expenses with the same tag value (sum the expense value) */}
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                            <View>
-                                {
-                                    curMonthlyExpenses.map((curExpense) => {
-                                        return (
-                                            <View key={curExpense.timestamp}>
-                                                <Text>{curExpense.tag}</Text>
-                                            </View>
-                                        )
-                                    })
-                                }
-                            </View>
-                            <View>
-                                {
-                                    curMonthlyExpenses.map((curExpense) => {
-                                        return (
-                                            <View key={curExpense.timestamp}>
-                                                <Text>{curExpense.value.toFixed(2)}</Text>
-                                            </View>
-                                        )
-                                    })
-                                }
-                            </View>
-                        </View>
-                    </View>
+                        expenseViewWidth={expenseViewWidth}
+                        curMonthlyExpenses={curMonthlyExpenses}
+                        spendEndAngle={spendEndAngle}
+                    />
                 )
                 break
             case 'all':
