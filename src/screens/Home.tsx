@@ -59,9 +59,10 @@ const Home = () => {
         {
             type: 'spend'
         },
-        {
-            type: 'all'
-        }
+        // TODO: bring back when it is polished
+        // {
+        //     type: 'all'
+        // }
     ]
 
     const retrieveLocalData = async () => {
@@ -200,7 +201,8 @@ const Home = () => {
     }
 
     return (
-        <View style={[STYLES.page, { paddingBottom: 10 }]}>
+        // TODO: once All slide is polished, change parent paddingBottom to 10 instead of 20
+        <View style={[STYLES.page, { paddingBottom: 20 }]}>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>My Dashboard</Text>
             </View>
@@ -215,8 +217,9 @@ const Home = () => {
                 autoplay={false}
                 onSnapToItem={(index) => setCurInfoIndex(index)}
             />
-            <Pagination
-                dotsLength={2}
+            {/* TODO: bring back once All slide is polished */}
+            {/* <Pagination
+                dotsLength={1}
                 activeDotIndex={curInfoIndex}
                 containerStyle={{
                     // default padding is too large, override it with smaller value
@@ -226,7 +229,7 @@ const Home = () => {
                 dotStyle={{
                     backgroundColor: THEME.PRIMARY.Light
                 }}
-            />
+            /> */}
             {
                 loading && <View style={styles.loader}>
                     <ActivityIndicator size='large' color='#ccc' />
