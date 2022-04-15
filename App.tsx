@@ -7,13 +7,14 @@ import Home from './src/screens/Home';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import FlashMessage from 'react-native-flash-message';
-import { THEME } from './src/styles';
+import { STYLES, THEME } from './src/styles';
 import { homeSvg, addSvg, settingsSvg } from './src/assets/svgs/navigation'
 import { SvgXml } from 'react-native-svg';
 import GenericModal from './src/components/GenericModal';
 import { useAppDispatch, useAppSelector } from './src/redux/hooks';
 import { selectUserData, setUserData } from './src/redux/reducers/userSlice';
 import moment from 'moment';
+import GenericButton from './src/components/GenericButton';
 
 type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 type ChosenMonetaryType = 'income' | 'expense'
@@ -72,7 +73,7 @@ const MainBottomTab = () => {
             const valToUse = addValInputIsBlurred ? addedValue : Number(addValueInput)
 
             if (isNaN(valToUse)) {
-                throw new Error ('Value entered is not a number')
+                throw new Error('Value entered is not a number')
             }
 
             if (!setAddValInputIsBlurred)
@@ -175,9 +176,7 @@ const MainBottomTab = () => {
                 flashMessageRef={modalFlashRef}
             >
                 <>
-                    <View>
-                        <Text>Add monetary value to calculation</Text>
-                    </View>
+                    <Text style={[STYLES.textLarge, { marginBottom: 10 }]}>Add Data</Text>
                     {/* Monetary Type */}
                     <View
                         style={{
@@ -186,34 +185,30 @@ const MainBottomTab = () => {
                             marginVertical: 10
                         }}
                     >
-                        <TouchableOpacity
+                        <GenericButton
                             onPress={() => setChosenType('income')}
-                            style={[styles.chosenTypeButton, {
+                            style={{
                                 backgroundColor: chosenType === 'income' ? 'green' : 'white',
                                 borderColor: 'green',
                                 marginRight: 10
-                            }]}
-                        >
-                            <Text style={{
+                            }}
+                            textStyle={{
                                 color: chosenType === 'income' ? 'white' : 'green'
-                            }}>
-                                Income
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                            }}
+                            label='Income'
+                        />
+                        <GenericButton
                             onPress={() => setChosenType('expense')}
-                            style={[styles.chosenTypeButton, {
+                            style={{
                                 backgroundColor: chosenType === 'expense' ? 'red' : 'white',
                                 borderColor: 'red',
                                 marginLeft: 10
-                            }]}
-                        >
-                            <Text style={{
+                            }}
+                            textStyle={{
                                 color: chosenType === 'expense' ? 'white' : 'red'
-                            }}>
-                                Expense
-                            </Text>
-                        </TouchableOpacity>
+                            }}
+                            label='Expense'
+                        />
                     </View>
                     <View style={{
                         marginBottom: 10,
