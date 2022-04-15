@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useRef, useState } from 'react'
-import { AsyncStorage, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { AsyncStorage, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { createNativeStackNavigator as createStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -14,7 +14,8 @@ import GenericModal from './src/components/GenericModal';
 import { useAppDispatch, useAppSelector } from './src/redux/hooks';
 import { selectUserData, setUserData } from './src/redux/reducers/userSlice';
 import moment from 'moment';
-import GenericButton from './src/components/GenericButton';
+import Button from './src/components/Button';
+import Text from './src/components/Text'
 
 type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 type ChosenMonetaryType = 'income' | 'expense'
@@ -179,44 +180,32 @@ const MainBottomTab = () => {
                     <Text style={[STYLES.textLarge, { marginBottom: 10 }]}>Add Data</Text>
                     {/* Monetary Type */}
                     <View
-                        style={{
-                            flexDirection: 'row',
-                            width: '100%',
-                            marginVertical: 10
-                        }}
+                        style={styles.typeButtonsContainer}
                     >
-                        <GenericButton
+                        <Button
                             onPress={() => setChosenType('income')}
+                            isSelected={chosenType === 'income'}
                             style={{
-                                backgroundColor: chosenType === 'income' ? 'green' : 'white',
-                                borderColor: 'green',
+                                // backgroundColor: chosenType === 'income' ? 'green' : 'white',
+                                // borderColor: 'green',
                                 marginRight: 10
                             }}
-                            textStyle={{
-                                color: chosenType === 'income' ? 'white' : 'green'
-                            }}
+                            // textStyle={{ color: chosenType === 'income' ? 'white' : 'green' }}
                             label='Income'
                         />
-                        <GenericButton
+                        <Button
                             onPress={() => setChosenType('expense')}
+                            isSelected={chosenType === 'expense'}
                             style={{
-                                backgroundColor: chosenType === 'expense' ? 'red' : 'white',
-                                borderColor: 'red',
+                                // backgroundColor: chosenType === 'expense' ? 'red' : 'white',
+                                // borderColor: 'red',
                                 marginLeft: 10
                             }}
-                            textStyle={{
-                                color: chosenType === 'expense' ? 'white' : 'red'
-                            }}
+                            // textStyle={{ color: chosenType === 'expense' ? 'white' : 'red' }}
                             label='Expense'
                         />
                     </View>
-                    <View style={{
-                        marginBottom: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        width: '100%',
-                        overflow: 'hidden'
-                    }}>
+                    <View style={styles.dataInputContainer}>
                         <Text style={{ fontSize: 16 }}>$</Text>
                         <TextInput
                             ref={textInputRef}
@@ -251,7 +240,7 @@ const MainBottomTab = () => {
                             {renderTags()}
                         </View>
                     </View>
-                    <View style={{ width: '100%', }}>
+                    <View style={{ width: '100%' }}>
                         <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
                             <Text style={{ color: 'orange' }}>Add</Text>
                         </TouchableOpacity>
@@ -371,14 +360,26 @@ const styles = StyleSheet.create({
         // marginTop: 10,
         // marginBottom: 'auto'
     },
-    chosenTypeButton: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        borderWidth: 2,
-        alignItems: 'center'
+    typeButtonsContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        marginVertical: 10
     },
+    dataInputContainer: {
+        marginBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        overflow: 'hidden'
+    }
+    // chosenTypeButton: {
+    //     flex: 1,
+    //     padding: 10,
+    //     backgroundColor: 'white',
+    //     borderRadius: 10,
+    //     borderWidth: 2,
+    //     alignItems: 'center'
+    // },
 })
 
 export default App;
