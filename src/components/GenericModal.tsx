@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
+import { THEME } from '../styles';
 
 interface GenericModalProps {
     visible: boolean,
@@ -41,9 +42,12 @@ const GenericModal: FC<GenericModalProps> = ({
                     alignItems: 'center',
                     borderTopRightRadius: 15,
                     borderTopLeftRadius: 15,
+                    borderWidth: 1,
+                    borderBottomWidth: 0,
+                    borderColor: THEME.PRIMARY.Light,
                     padding: 20,
                     paddingTop: 30,
-                    backgroundColor: 'white',
+                    backgroundColor: THEME.SECONDARY.Dark,
                     width: '100%',
                     // height: Dimensions.get('screen').height * 0.6,
                 }}
