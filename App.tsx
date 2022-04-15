@@ -71,6 +71,10 @@ const MainBottomTab = () => {
 
             const valToUse = addValInputIsBlurred ? addedValue : Number(addValueInput)
 
+            if (isNaN(valToUse)) {
+                throw new Error ('Value entered is not a number')
+            }
+
             if (!setAddValInputIsBlurred)
                 textInputRef.current?.blur()
 

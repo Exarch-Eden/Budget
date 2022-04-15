@@ -42,8 +42,8 @@ const Home = () => {
 
     // used to gauge monthly spending on Recent Spendings tab
     // MUST be greater than -90 and less than 90
-    // -89 is complete zero
-    // -88 is the smallest integer value where bar actually shows
+    // -89 is complete zero (same with 89)
+    // -88 is the smallest integer value where bar actually shows (same with 88)
     const [spendEndAngle, setSpendEndAngle] = useState(-88)
     // used to store the dynamically-calculated height of the parent view
     // holding the pie charts so that said charts can match it
@@ -164,7 +164,6 @@ const Home = () => {
                 }
             ).value);
 
-        // TODO: Move each slide content into its own component
         switch (item.type) {
             case 'spend':
                 slideContent = (

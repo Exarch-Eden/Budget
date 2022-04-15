@@ -19,6 +19,8 @@ const GenericModal: FC<GenericModalProps> = ({
     flashMessageRef,
     children
 }) => {
+    // TODO: implement animated view
+    // TODO: add Show More Details (opens new screen with more inputs)
     return <Modal visible={visible} transparent>
         <TouchableWithoutFeedback
             onPress={() => setVisible(false)}
