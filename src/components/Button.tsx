@@ -2,15 +2,16 @@ import React, { FC, ReactNode } from 'react'
 import {
     StyleProp,
     StyleSheet,
-    Text,
     TextStyle,
     TouchableOpacity,
     ViewStyle
 } from 'react-native'
 import { THEME } from '../styles'
+import Text from './Text'
 
 interface GenericButtonProps {
     onPress?: () => void,
+    ignoreIsSelected?: boolean,
     isSelected?: boolean,
     style?: StyleProp<ViewStyle>,
     textStyle?: StyleProp<TextStyle>,
@@ -20,6 +21,7 @@ interface GenericButtonProps {
 
 const Button: FC<GenericButtonProps> = ({
     onPress,
+    ignoreIsSelected,
     isSelected,
     style,
     textStyle,
@@ -43,9 +45,14 @@ const Button: FC<GenericButtonProps> = ({
                     :
                     <Text
                         style={[
-                            { color: isSelected ? THEME.SECONDARY.Dark : THEME.PRIMARY.Light },
+                            // typeof isSelected === 'boolean'
+                            // ? 
+                            // { color: isSelected ? THEME.SECONDARY.Dark : THEME.PRIMARY.Light } 
+                            // : {}
+                            // ,
                             textStyle
                         ]}
+                        dark={!ignoreIsSelected ? isSelected : false}
                     >
                         {`${label}`}
                     </Text>
@@ -56,7 +63,7 @@ const Button: FC<GenericButtonProps> = ({
 
 const styles = StyleSheet.create({
     chosenTypeButton: {
-        flex: 1,
+        // flex: 1,
         padding: 10,
         backgroundColor: 'transparent',
         borderRadius: 10,
