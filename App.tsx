@@ -123,49 +123,35 @@ const MainBottomTab = () => {
         // const tags = ['tag1', 'tag2']
 
         const tagsElem = tags?.map((tag, index) => {
+            const marginCheck = index < (tags.length - 1)
+            // const marginCheck = index === 0 || index < (tagsElem?.length || 0) - 1
+            console.log('tag: ', tag);
+            console.log('index: ', index);
+            console.log('marginCheck: ', marginCheck);
+
             return (
-                <TouchableOpacity
+                <Button
                     key={`#${tag}`}
                     onPress={() => selectedTag !== tag ? setSelectedTag(tag) : setSelectedTag(undefined)}
-                >
-                    <Text
-                        style={{
-                            backgroundColor: selectedTag === tag ? 'orange' : 'white',
-                            borderWidth: 1,
-                            borderColor: selectedTag === tag ? 'transparent' : 'orange',
-                            padding: 5,
-                            paddingHorizontal: 10,
-                            borderRadius: 50,
-                            marginHorizontal: 5
-                        }}
-                    >
-                        {tag}
-                    </Text>
-                </TouchableOpacity>
+                    style={{ marginRight: marginCheck ? 10 : 0 }}
+                    // style={ marginCheck ? hasMarginRight : hasMarginLeft}
+                    label={tag}
+                    ignoreIsSelected
+                />
             )
         })
 
-
         return (tagsElem || [])
             // the add button
-            .concat([(<TouchableOpacity
-                key='add'
-                onPress={() => setTagModalVisible(true)}
-            >
-                <Text
-                    style={{
-                        backgroundColor: 'white',
-                        borderWidth: 1,
-                        borderColor: 'blue',
-                        padding: 5,
-                        paddingHorizontal: 10,
-                        borderRadius: 50,
-                        marginHorizontal: 5
-                    }}
-                >
-                    + Add
-                </Text>
-            </TouchableOpacity>)])
+            .concat([(
+                <Button
+                    key='add'
+                    onPress={() => setTagModalVisible(true)}
+                    label='+ Add'
+                    ignoreIsSelected
+                    style={{ marginLeft: tags?.length ? 10 : 0 }}
+                />
+            )])
     }
 
     const addValueModal = () => {
@@ -179,6 +165,7 @@ const MainBottomTab = () => {
                 <>
                     <Text style={[STYLES.textLarge, { marginBottom: 10 }]}>Add Data</Text>
                     {/* Monetary Type */}
+                    <Text size='small' style={{ alignSelf: 'flex-start' }}>Type</Text>
                     <View
                         style={styles.typeButtonsContainer}
                     >
@@ -205,11 +192,30 @@ const MainBottomTab = () => {
                             label='Expense'
                         />
                     </View>
+                    {/* Tag Selector */}
+                    <View style={{
+                        marginBottom: 10,
+                        alignSelf: 'flex-start'
+                    }}>
+                        <Text size='small' style={{ marginBottom: 5 }}>
+                            {/* {tags ? 'Select an existing tag:' : 'You have no existing tags: '} */}
+                            Categories
+                        </Text>
+                        <View style={{
+                            flexDirection: 'row',
+                            // borderColor: 'red', 
+                            // borderWidth: 1 
+                        }}>
+                            {renderTags()}
+                        </View>
+                    </View>
+                    <Text size='small' style={{ alignSelf: 'flex-start' }}>Amount</Text>
                     <View style={styles.dataInputContainer}>
-                        <Text style={{ fontSize: 16 }}>$</Text>
+                        <Text size='large'>$</Text>
                         <TextInput
                             ref={textInputRef}
                             keyboardType='number-pad'
+                            placeholderTextColor={THEME.PRIMARY.Light}
                             placeholder='0.00'
                             value={addValueInput}
                             onChangeText={(text) => setAddValueInput(text || undefined)}
@@ -227,18 +233,13 @@ const MainBottomTab = () => {
                                 // }
                             }}
                             onFocus={() => setAddValInputIsBlurred(false)}
-                            style={{ width: '100%', borderBottomColor: '#ccc', borderBottomWidth: 1 }}
+                            style={{
+                                width: '100%',
+                                borderBottomColor: THEME.PRIMARY.Light,
+                                borderBottomWidth: 2,
+                                color: THEME.PRIMARY.Light
+                            }}
                         />
-                    </View>
-                    {/* Tag Selector */}
-                    <View style={{
-                        marginBottom: 10,
-                        alignSelf: 'flex-start'
-                    }}>
-                        <Text style={{ marginBottom: 5 }}>{tags ? 'Select an existing tag:' : 'You have no existing tags: '}</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            {renderTags()}
-                        </View>
                     </View>
                     <View style={{ width: '100%' }}>
                         <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
@@ -281,12 +282,24 @@ const MainBottomTab = () => {
         }
     }, [tagModalVisible])
 
+    // TODO: change process to edit categories instead of adding categories only
     return (
         <>
             <GenericModal visible={tagModalVisible} setVisible={setTagModalVisible}>
                 <>
-                    <Text style={{ marginBottom: 10 }}>Add a tag</Text>
-                    <TextInput placeholder='E.g. Salary' value={addTagInput} onChangeText={text => setAddTagInput(text)} />
+                    <Text size='large' style={{ marginBottom: 10 }}>Add Category</Text>
+                    <TextInput
+                        placeholder='E.g. Salary'
+                        value={addTagInput}
+                        onChangeText={text => setAddTagInput(text)}
+                        placeholderTextColor={THEME.PRIMARY.Light}
+                        style={{
+                            width: '100%',
+                            borderBottomColor: THEME.PRIMARY.Light,
+                            borderBottomWidth: 2,
+                            marginBottom: 10
+                        }}
+                    />
                     <View style={{ width: '100%' }}>
                         <TouchableOpacity onPress={() => addTag()} style={styles.modalAddButton}>
                             <Text style={{ color: 'orange' }}>Add</Text>
