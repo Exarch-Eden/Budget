@@ -15,9 +15,9 @@ interface TextProps extends TextPropsNative {
  * Custom Text wrapped under react-native's own Text component.
  * Automatically utilizes the app's theme as colour.
  * 
- * @param dark Switch text colour to Secondary Dark.
- * @param style Custom style props for react-native Text component.
- * @param size Choose between different font size presets.
+ * @param {boolean} dark Switch text colour to Secondary Dark.
+ * @param {StyleProp<TextStyle>} style Custom style props for react-native Text component.
+ * @param {TextSize} size Choose between different font size presets.
  */
 const Text: React.FC<TextProps> = ({ dark, style, size, children, ...rest }) => {
     return (
@@ -29,7 +29,8 @@ const Text: React.FC<TextProps> = ({ dark, style, size, children, ...rest }) => 
             ]}
             {...rest}
         >
-            {React.Children.toArray(children)}
+            {`${children}`}
+            {/* {React.Children.toArray(children)} */}
         </TextNative>
     )
 }
@@ -54,6 +55,8 @@ const getTextStyleFromSize = (size?: TextSize) => {
         case 'large':
             retStyle = STYLES.textLarge
             break
+        default:
+            retStyle = STYLES.textNormal
     }
 
     return retStyle
