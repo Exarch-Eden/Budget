@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { THEME } from '../styles';
+import Button from './Button';
 
 interface GenericModalProps {
     visible: boolean,
@@ -54,9 +55,16 @@ const GenericModal: FC<GenericModalProps> = ({
             >
                 {React.Children.toArray(children)}
                 <View style={{ width: '100%', }}>
-                    <TouchableOpacity onPress={closeModalButtonOnPress || (() => setVisible(false))} style={styles.modalCancelButton}>
-                        <Text style={{ color: 'red' }}>Cancel</Text>
-                    </TouchableOpacity>
+                    <Button 
+                        onPress={closeModalButtonOnPress || (() => setVisible(false))}
+                        style={{
+                            borderColor: THEME.PRIMARY.Red
+                        }}
+                        textStyle={{
+                            color: THEME.PRIMARY.Red
+                        }}
+                        label='CANCEL'
+                    />
                 </View>
             </View>
         </TouchableWithoutFeedback>

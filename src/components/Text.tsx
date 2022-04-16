@@ -23,9 +23,9 @@ const Text: React.FC<TextProps> = ({ dark, style, size, children, ...rest }) => 
     return (
         <TextNative
             style={[
-                style,
                 getTextStyleFromSize(size),
-                { color: dark ? THEME.SECONDARY.Dark : THEME.PRIMARY.Light }
+                { color: dark ? THEME.SECONDARY.Dark : THEME.PRIMARY.Light },
+                style
             ]}
             {...rest}
         >

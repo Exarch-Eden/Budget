@@ -44,14 +44,7 @@ const Button: FC<GenericButtonProps> = ({
                     ? React.Children.toArray(children)
                     :
                     <Text
-                        style={[
-                            // typeof isSelected === 'boolean'
-                            // ? 
-                            // { color: isSelected ? THEME.SECONDARY.Dark : THEME.PRIMARY.Light } 
-                            // : {}
-                            // ,
-                            textStyle
-                        ]}
+                        style={textStyle}
                         dark={!ignoreIsSelected ? isSelected : false}
                     >
                         {`${label}`}
