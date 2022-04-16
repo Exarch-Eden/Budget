@@ -124,7 +124,6 @@ const MainBottomTab = () => {
 
         const tagsElem = tags?.map((tag, index) => {
             const marginCheck = index < (tags.length - 1)
-            // const marginCheck = index === 0 || index < (tagsElem?.length || 0) - 1
             console.log('tag: ', tag);
             console.log('index: ', index);
             console.log('marginCheck: ', marginCheck);
@@ -134,7 +133,6 @@ const MainBottomTab = () => {
                     key={`#${tag}`}
                     onPress={() => selectedTag !== tag ? setSelectedTag(tag) : setSelectedTag(undefined)}
                     style={{ marginRight: marginCheck ? 10 : 0 }}
-                    // style={ marginCheck ? hasMarginRight : hasMarginLeft}
                     label={tag}
                     ignoreIsSelected
                 />
@@ -173,22 +171,16 @@ const MainBottomTab = () => {
                             onPress={() => setChosenType('income')}
                             isSelected={chosenType === 'income'}
                             style={{
-                                // backgroundColor: chosenType === 'income' ? 'green' : 'white',
-                                // borderColor: 'green',
                                 marginRight: 10
                             }}
-                            // textStyle={{ color: chosenType === 'income' ? 'white' : 'green' }}
                             label='Income'
                         />
                         <Button
                             onPress={() => setChosenType('expense')}
                             isSelected={chosenType === 'expense'}
                             style={{
-                                // backgroundColor: chosenType === 'expense' ? 'red' : 'white',
-                                // borderColor: 'red',
                                 marginLeft: 10
                             }}
-                            // textStyle={{ color: chosenType === 'expense' ? 'white' : 'red' }}
                             label='Expense'
                         />
                     </View>
@@ -242,9 +234,13 @@ const MainBottomTab = () => {
                         />
                     </View>
                     <View style={{ width: '100%' }}>
-                        <TouchableOpacity onPress={() => modalAddButtonOnPress()} style={styles.modalAddButton}>
-                            <Text style={{ color: 'orange' }}>Add</Text>
-                        </TouchableOpacity>
+                        <Button
+                            onPress={() => modalAddButtonOnPress()}
+                            label='ADD'
+                            style={{
+                                marginBottom: 10
+                            }}
+                        />
                     </View>
                 </>
             </GenericModal>
@@ -301,9 +297,13 @@ const MainBottomTab = () => {
                         }}
                     />
                     <View style={{ width: '100%' }}>
-                        <TouchableOpacity onPress={() => addTag()} style={styles.modalAddButton}>
-                            <Text style={{ color: 'orange' }}>Add</Text>
-                        </TouchableOpacity>
+                        <Button
+                            onPress={() => addTag()}
+                            label='ADD'
+                            style={{
+                                marginBottom: 10
+                            }}
+                        />
                     </View>
                 </>
             </GenericModal>
