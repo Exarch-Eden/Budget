@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { AsyncStorage, TextInput, View } from 'react-native'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { selectUserData, setUserData } from '../../redux/reducers/userSlice'
+import { selectUserData, setUserData } from '../../redux/reducers/UserSlice'
 import { THEME } from '../../styles'
 import Button from '../Button'
 import GenericModal from '../GenericModal'

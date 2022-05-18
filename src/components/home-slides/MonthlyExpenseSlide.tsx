@@ -6,7 +6,7 @@ import { VictoryPie, VictoryAnimation, VictoryLabel } from 'victory-native'
 
 import Text from '../Text'
 import { filterSvg } from '../../assets/svgs'
-import { MonetaryData } from '../../redux/reducers/userSlice'
+import { MonetaryData } from '../../redux/reducers/UserSlice'
 import { STYLES, THEME } from '../../styles'
 
 const deviceWidth = Dimensions.get('window').width

@@ -12,7 +12,7 @@ import { homeSvg, addSvg, settingsSvg } from './src/assets/svgs/navigation'
 import { SvgXml } from 'react-native-svg';
 import GenericModal from './src/components/GenericModal';
 import { useAppDispatch, useAppSelector } from './src/redux/hooks';
-import { selectUserData, setUserData } from './src/redux/reducers/userSlice';
+import { selectUserData, setUserData } from './src/redux/reducers/UserSlice';
 import moment from 'moment';
 import Button from './src/components/Button';
 import Text from './src/components/Text'
