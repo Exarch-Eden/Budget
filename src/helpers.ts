@@ -39,8 +39,12 @@ const showSuccess: ShowMessageAltFunc = (message, description, duration, rest) =
     showMessage(message, description, 'success', duration, undefined, rest)
 }
 
+
+const getRandomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+
 export default {
     showMessage,
     showDanger,
-    showSuccess
+    showSuccess,
+    getRandomColor
 }
