@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import UserDataReducer from './reducers/UserSlice'
 import ActivityReducer from './reducers/ActivitySlice'
+import MonetaryReducer from './reducers/MonetarySlice'
 
 export const store = configureStore({
     reducer: {
         user: UserDataReducer,
-        activity: ActivityReducer
+        activity: ActivityReducer,
+        monetary: MonetaryReducer
     }
 })
 
