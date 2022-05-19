@@ -13,6 +13,7 @@ export interface UserData {
     // expenses: number,
     income: MonetaryData[],
     expenses: MonetaryData[],
+    net: number,
     tags?: string[]
 }
 
@@ -23,7 +24,8 @@ interface UserDataState {
 const initialState: UserDataState = {
     user: {
         income: [],
-        expenses: []
+        expenses: [],
+        net: 0
         // income: 0,
         // expenses: 0
     }

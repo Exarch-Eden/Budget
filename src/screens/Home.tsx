@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
+import { PieChartData } from 'react-native-svg-charts'
 import MonthlyExpenseSlide from '../components/home-slides/MonthlyExpenseSlide'
 
 import Text from '../components/Text'
 import { InfoSlideRenderFunc } from '../constants/types/slides'
 
 import { INFO_SLIDES } from '../constants/values/slides'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { selectInitialRender } from '../redux/reducers/ActivitySlice'
+import { selectExpensesVal, selectIncomeVal } from '../redux/reducers/MonetarySlice'
 import { STYLES } from '../styles'
 
 const Home = () => {
     const deviceWidth = Dimensions.get('window').width
     const itemWidth = deviceWidth - 40
+
+    const incomeVal = useAppSelector(selectIncomeVal)
+    const expensesVal = useAppSelector(selectExpensesVal)
+
+    const initialRender = useAppSelector(selectInitialRender)
+
+    const dispatch = useAppDispatch()
 
     /**
      * Used to gauge monthly spending on Recent Spendings tab.
@@ -60,7 +71,34 @@ const Home = () => {
         return slideContent
     }
 
+    // used by All tab (currently not active)
+    const generatePieData = (): PieChartData[] => {
+        const bothBlank = !incomeVal && !expensesVal
+
+        return [
+            {
+                value: bothBlank ? 50 : incomeVal,
+                svg: {
+                    fill: 'green',
+                    onPress: () => {}
+                },
+                key: 'income'
+            },
+            {
+                value: bothBlank ? 50 : expensesVal,
+                svg: {
+                    fill: 'red',
+                    onPress: () => {}
+                },
+                key: 'expenses'
+            }
+        ]
+    }
+
     useEffect(() => {
+        console.log('initial useEffect');
+        
+        // TODO: get user data from asyncstorage
 
     }, [])
 
@@ -69,7 +107,7 @@ const Home = () => {
             <View style={styles.HeaderContainer}>
                 <Text style={styles.Header}>Dashboard</Text>
             </View>
-            {/* <Carousel
+            <Carousel
                 sliderWidth={deviceWidth}
                 itemWidth={itemWidth}
                 data={INFO_SLIDES}
@@ -78,7 +116,7 @@ const Home = () => {
                 enableMomentum={false}
                 lockScrollWhileSnapping
                 autoplay={false}
-            /> */}
+            />
         </View>
     )
 }
