@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import { PieChartData } from 'react-native-svg-charts'
 import MonthlyExpenseSlide from '../components/home-slides/MonthlyExpenseSlide'
+import Page from '../components/Page'
 
 import Text from '../components/Text'
 import { InfoSlideRenderFunc } from '../constants/types/slides'
@@ -80,7 +81,7 @@ const Home = () => {
                 value: bothBlank ? 50 : incomeVal,
                 svg: {
                     fill: 'green',
-                    onPress: () => {}
+                    onPress: () => { }
                 },
                 key: 'income'
             },
@@ -88,7 +89,7 @@ const Home = () => {
                 value: bothBlank ? 50 : expensesVal,
                 svg: {
                     fill: 'red',
-                    onPress: () => {}
+                    onPress: () => { }
                 },
                 key: 'expenses'
             }
@@ -97,13 +98,13 @@ const Home = () => {
 
     useEffect(() => {
         console.log('initial useEffect');
-        
+
         // TODO: get user data from asyncstorage
 
     }, [])
 
     return (
-        <View style={[STYLES.page]}>
+        <Page>
             <View style={styles.HeaderContainer}>
                 <Text style={styles.Header}>Dashboard</Text>
             </View>
@@ -117,7 +118,7 @@ const Home = () => {
                 lockScrollWhileSnapping
                 autoplay={false}
             />
-        </View>
+        </Page>
     )
 }
 
