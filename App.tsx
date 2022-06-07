@@ -19,6 +19,7 @@ import Text from './src/components/Text'
 import AddValueModal from './src/components/modals/AddValueModal';
 import { ChosenMonetaryType } from './src/constants/types/monetary-types';
 import AddTagModal from './src/components/modals/AddTagModal';
+import Landing from './src/screens/authentication/Landing';
 
 type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 
@@ -31,6 +32,7 @@ const App = () => {
                 <Stack.Navigator screenOptions={{
                     headerShown: false
                 }}>
+                    <Stack.Screen name='Landing' component={Landing} />
                     <Stack.Screen name='Home' component={MainBottomTab} />
                 </Stack.Navigator>
                 <FlashMessage position='top' />
