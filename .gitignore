@@ -58,3 +58,8 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# ---------------------------------- CUSTOM ---------------------------------- #
+
+# HSBC API
+hsbc_api/
