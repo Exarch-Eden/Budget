@@ -20,6 +20,7 @@ import AddValueModal from './src/components/modals/AddValueModal';
 import { ChosenMonetaryType } from './src/constants/types/monetary-types';
 import AddTagModal from './src/components/modals/AddTagModal';
 import Landing from './src/screens/authentication/Landing';
+import Settings from './src/screens/bottom-tabs/Settings';
 
 type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 
@@ -115,7 +116,7 @@ const MainBottomTab = () => {
                         }
                     })}
                 />
-                <Tab.Screen name='Setting' component={Home} />
+                <Tab.Screen name='Setting' component={Settings} />
             </Tab.Navigator>
         </>
     )
