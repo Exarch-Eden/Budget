@@ -32,12 +32,6 @@ const Home = () => {
      */
     const [spendEndAngle, setSpendEndAngle] = useState(-88)
 
-    /**
-     * Used to store the dynamically-calculated height of the parent view
-     * holding the pie charts so that said charts can match it.
-     */
-    const [expenseViewWidth, setExpenseViewWidth] = useState(0)
-
     const renderInfoSlides: InfoSlideRenderFunc = ({ item }) => {
         let slideContent
 
@@ -45,8 +39,6 @@ const Home = () => {
             case 'spend':
                 slideContent = (
                     <MonthlyExpenseSlide
-                        onLayout={e => setExpenseViewWidth(e.nativeEvent.layout.width)}
-                        expenseViewWidth={expenseViewWidth}
                         curMonthlyExpenses={[]}
                         spendEndAngle={spendEndAngle}
                     />
@@ -105,9 +97,9 @@ const Home = () => {
 
     return (
         <Page>
-            <View style={styles.HeaderContainer}>
+            {/* <View style={styles.HeaderContainer}>
                 <Text style={styles.Header}>Dashboard</Text>
-            </View>
+            </View> */}
             <Carousel
                 sliderWidth={deviceWidth}
                 itemWidth={itemWidth}
