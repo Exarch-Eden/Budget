@@ -1,13 +1,14 @@
-import React, { FC } from 'react'
-import { Dimensions, LayoutChangeEvent, View } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
+import { Dimensions, LayoutChangeEvent, ScrollView, View } from 'react-native'
 import Svg, { SvgXml } from 'react-native-svg'
 import { AnimationStyle } from 'victory-core'
 import { VictoryPie, VictoryAnimation, VictoryLabel } from 'victory-native'
 
 import Text from '../Text'
 import { filterSvg } from '../../assets/svgs'
-import { MonetaryData } from '../../redux/reducers/UserSlice'
+import { MonetaryData } from '../../constants/types/monetary-types'
 import { STYLES, THEME } from '../../styles'
+import MonthlyExpenseList from './MonthlyExpenseList'
 
 const deviceWidth = Dimensions.get('window').width
 const PIE_WIDTH = deviceWidth
@@ -39,17 +40,35 @@ const AVERAGE_SPENDING = 200
 
 interface MonthlyExpenseSlideProps {
     curMonthlyExpenses: MonetaryData[],
-    expenseViewWidth: number,
-    spendEndAngle: number,
-    onLayout?: (e: LayoutChangeEvent) => void,
+    spendEndAngle: number
 }
 
 const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
     curMonthlyExpenses,
-    expenseViewWidth,
-    spendEndAngle,
-    onLayout,
+    spendEndAngle
 }) => {
+    /**
+     * Used to store the dynamically-calculated width of the parent scrollview
+     * holding the pie charts so that said charts can match it.
+     */
+    const [expenseViewWidth, setExpenseViewWidth] = useState(0)
+
+    /** 
+     * Used to store the height of the parent scrollview to dynamically
+     * calculate MonthlyExpenseList's height.
+     */
+    const [expenseViewHeight, setExpenseViewHeight] = useState(0)
+
+    /**
+     * Used to store the initial Y value of MonthlyExpenseList to dynamically
+     * calculate its height.
+     */
+    const [expenseListY, setExpenseListY] = useState(0)
+
+    /**
+     * Stores the dynamic height calculation of MonthlyExpenseList (expenseViewHeight - expenseListY).
+     */
+    const [expenseListHeight, setExpenseListHeight] = useState(0)
 
     // the label rendered in the middle of the half-pie
     const TotalMonthlyExpenseLabel = (props: AnimationStyle) => {
@@ -75,9 +94,26 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
         )
     }
 
+    useEffect(() => {
+        console.log('expenseListHeight set process useEffect');
+        console.log('expense calculations: ', {
+            expenseViewHeight,
+            expenseListY
+        });
+
+        if (!expenseViewHeight || !expenseListY) return;
+
+        console.log('setting expense list height: ', expenseViewHeight - expenseListY);
+
+        setExpenseListHeight(expenseViewHeight - expenseListY)
+    }, [expenseViewHeight, expenseListY])
+
     return (
-        <View
-            onLayout={onLayout}
+        <ScrollView
+            onLayout={e => {
+                setExpenseViewWidth(e.nativeEvent.layout.width)
+                setExpenseViewHeight(e.nativeEvent.layout.height)
+            }}
         >
             <Text size='large' numberOfLines={1}>Recent Spendings</Text>
             {/* Svg height is half of pie because we are only using the top half */}
@@ -85,11 +121,7 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
                 height={PIE_HEIGHT / 2}
                 width='100%'
                 style={{
-                    // height: PIE_HEIGHT / 2, 
-                    // width: '100%', 
                     marginVertical: 20,
-                    // maxHeight: '100%',
-                    // maxWidth: '100%',
                 }}
             >
                 {/* TODO: add monthly expense amount in center of pie (in open space) */}
@@ -98,7 +130,6 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
                     data={DUMMY_DATA}
                     height={PIE_HEIGHT}
                     width={expenseViewWidth || PIE_WIDTH}
-                    // width={PIE_WIDTH}
                     radius={PIE_RADIUS}
                     padAngle={2}
                     standalone={false}
@@ -171,32 +202,18 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
                     <SvgXml xml={filterSvg} />
                 </View>
             </View>
-            {/* TODO: group expenses with the same tag value (sum the expense value) */}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                <View>
-                    {
-                        curMonthlyExpenses.map((curExpense) => {
-                            return (
-                                <View key={curExpense.timestamp}>
-                                    <Text>{curExpense.tag}</Text>
-                                </View>
-                            )
-                        })
-                    }
-                </View>
-                <View>
-                    {
-                        curMonthlyExpenses.map((curExpense) => {
-                            return (
-                                <View key={curExpense.timestamp}>
-                                    <Text>{curExpense.value.toFixed(2)}</Text>
-                                </View>
-                            )
-                        })
-                    }
-                </View>
-            </View>
-        </View>
+            <MonthlyExpenseList
+                curMonthlyExpenses={curMonthlyExpenses}
+                style={expenseListHeight
+                    ? {
+                        height: expenseListHeight
+                    } : undefined
+                }
+                onLayout={e => {
+                    setExpenseListY(e.nativeEvent.layout.y)
+                }}
+            />
+        </ScrollView>
     )
 }
 
