@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.17",
-    "@react-navigation/bottom-tabs": "^6.1.0",
-    "@react-navigation/native": "^6.0.7",
-    "@react-navigation/native-stack": "^6.3.0",
+    "@react-navigation/bottom-tabs": "^5.11.8",
+    "@react-navigation/native": "^5.9.2",
+    "@react-navigation/stack": "^5.14.2",
     "@reduxjs/toolkit": "^1.6.1",
     "@types/react-native-snap-carousel": "^3.8.5",
     "@types/react-native-svg-charts": "^5.0.12",
@@ -28,8 +28,11 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^12.1.1",
     "react-native-svg-charts": "^5.4.0",
+    "@react-native-community/masked-view": "^0.1.10",
+    "react-native-gesture-handler": "^1.9.0",
     "react-redux": "^7.2.4",
-    "victory-native": "^36.3.0"
+    "victory-native": "^36.3.0",
+    "prop-types": "^15.5.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
