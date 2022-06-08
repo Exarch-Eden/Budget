@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useRef, useState } from 'react'
 import { AsyncStorage, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
-import { createNativeStackNavigator as createStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from './src/screens/Home';
@@ -77,10 +77,12 @@ const MainBottomTab = () => {
                 flashMessageRef={modalFlashRef}
             />
             <Tab.Navigator
+                tabBarOptions={{
+                    style: styles.tabBar,
+                    showLabel: false,
+                }}
                 screenOptions={({ route }) => ({
                     headerShown: false,
-                    tabBarStyle: styles.tabBar,
-                    tabBarShowLabel: false,
                     tabBarIcon: ({ focused }) => {
                         let iconSvg
                         switch (route.name as TAB_NAMES) {
