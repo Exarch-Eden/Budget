@@ -3,7 +3,7 @@ import { AsyncStorage, Image, StyleSheet, TextInput, TouchableOpacity, View } fr
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Home from './src/screens/Home';
+import Home from './src/screens/bottom-tabs/Home';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import FlashMessage from 'react-native-flash-message';
@@ -64,7 +64,7 @@ const MainBottomTab = () => {
     // TODO: change process to edit categories instead of adding categories only
     return (
         <>
-            <AddTagModal 
+            <AddTagModal
                 modalVisible={tagModalVisible}
                 setModalVisible={setTagModalVisible}
             />

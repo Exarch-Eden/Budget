@@ -7,18 +7,18 @@ import moment from 'moment'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Circle, Slice, VictoryAnimation, VictoryChart, VictoryLabel, VictoryPie } from 'victory-native';
 
-import Text from '../components/Text';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { MonetaryData, selectUserData, setUserData, UserData } from '../redux/reducers/UserSlice';
-import { passInitialRender, selectInitialRender } from '../redux/reducers/ActivitySlice';
-import GenericModal from '../components/GenericModal';
-import HELPERS from '../helpers'
-import { STYLES, THEME } from '../styles'
-import InfoCard from '../components/InfoCard';
+import Text from '../../components/Text';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { MonetaryData, selectUserData, setUserData, UserData } from '../../redux/reducers/UserSlice';
+import { passInitialRender, selectInitialRender } from '../../redux/reducers/ActivitySlice';
+import GenericModal from '../../components/GenericModal';
+import HELPERS from '../../helpers'
+import { STYLES, THEME } from '../../styles'
+import InfoCard from '../../components/InfoCard';
 import Svg, { SvgXml } from 'react-native-svg';
-import { filterSvg } from '../assets/svgs';
-import MonthlyExpenseSlide from '../components/home-slides/MonthlyExpenseSlide';
-import { InfoSlideData } from '../constants/types/slides';
+import { filterSvg } from '../../assets/svgs';
+import MonthlyExpenseSlide from '../../components/home-slides/MonthlyExpenseSlide';
+import { InfoSlideData } from '../../constants/types/slides';
 
 type ChosenMonetaryType = 'income' | 'expense'
 
