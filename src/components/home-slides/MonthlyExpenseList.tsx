@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginTop: 10,
         // for testing purposes; TODO: remove later
-        borderColor: 'red',
-        borderWidth: 1
+        // borderColor: 'red',
+        // borderWidth: 1
     },
     noDataTextContainer: {
         flex: 1,
