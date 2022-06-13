@@ -95,6 +95,8 @@ const Home = () => {
 
     }, [])
 
+    // NOTE: may scrap carousel idea due to drawer swipe interfering with
+    // carousel slide swipe
     return (
         <Page>
             {/* <View style={styles.HeaderContainer}>
