@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, Animated } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { THEME } from '../styles';
 import Button from './Button';
@@ -36,7 +36,7 @@ const GenericModal: FC<GenericModalProps> = ({
             </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback disabled={!contentOnPress} onPress={contentOnPress}>
-            <View
+            <Animated.View
                 style={{
                     position: 'absolute',
                     bottom: 0,
@@ -55,7 +55,7 @@ const GenericModal: FC<GenericModalProps> = ({
             >
                 {React.Children.toArray(children)}
                 <View style={{ width: '100%', }}>
-                    <Button 
+                    <Button
                         onPress={closeModalButtonOnPress || (() => setVisible(false))}
                         style={{
                             borderColor: THEME.PRIMARY.Red
@@ -66,7 +66,7 @@ const GenericModal: FC<GenericModalProps> = ({
                         label='CANCEL'
                     />
                 </View>
-            </View>
+            </Animated.View>
         </TouchableWithoutFeedback>
     </Modal>
 };
