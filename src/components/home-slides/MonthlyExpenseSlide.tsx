@@ -9,6 +9,7 @@ import { filterSvg } from '../../assets/svgs'
 import { MonetaryData } from '../../constants/types/monetary-types'
 import { STYLES, THEME } from '../../styles'
 import MonthlyExpenseList from './MonthlyExpenseList'
+import { useExpenseDimensions } from '../../hooks/useExpenseDimensions'
 
 const deviceWidth = Dimensions.get('window').width
 const PIE_WIDTH = deviceWidth
@@ -47,28 +48,13 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
     curMonthlyExpenses,
     spendEndAngle
 }) => {
-    /**
-     * Used to store the dynamically-calculated width of the parent scrollview
-     * holding the pie charts so that said charts can match it.
-     */
-    const [expenseViewWidth, setExpenseViewWidth] = useState(0)
-
-    /** 
-     * Used to store the height of the parent scrollview to dynamically
-     * calculate MonthlyExpenseList's height.
-     */
-    const [expenseViewHeight, setExpenseViewHeight] = useState(0)
-
-    /**
-     * Used to store the initial Y value of MonthlyExpenseList to dynamically
-     * calculate its height.
-     */
-    const [expenseListY, setExpenseListY] = useState(0)
-
-    /**
-     * Stores the dynamic height calculation of MonthlyExpenseList (expenseViewHeight - expenseListY).
-     */
-    const [expenseListHeight, setExpenseListHeight] = useState(0)
+    const {
+        expenseViewWidth,
+        expenseListHeight,
+        setExpenseViewWidth,
+        setExpenseViewHeight,
+        setExpenseListY
+    } = useExpenseDimensions()
 
     // the label rendered in the middle of the half-pie
     const TotalMonthlyExpenseLabel = (props: AnimationStyle) => {
@@ -93,20 +79,6 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
             />
         )
     }
-
-    useEffect(() => {
-        console.log('expenseListHeight set process useEffect');
-        console.log('expense calculations: ', {
-            expenseViewHeight,
-            expenseListY
-        });
-
-        if (!expenseViewHeight || !expenseListY) return;
-
-        console.log('setting expense list height: ', expenseViewHeight - expenseListY);
-
-        setExpenseListHeight(expenseViewHeight - expenseListY)
-    }, [expenseViewHeight, expenseListY])
 
     return (
         <ScrollView
