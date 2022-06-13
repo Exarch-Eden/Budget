@@ -26,6 +26,7 @@ type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 
 const App = () => {
     const Stack = createStackNavigator()
+    const dimensions = useDimensions()
 
     return (
         <NavigationContainer>
