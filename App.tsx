@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'
 import React, { createRef, useEffect, useRef, useState } from 'react'
 import { AsyncStorage, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,6 +22,9 @@ import { ChosenMonetaryType } from './src/constants/types/monetary-types';
 import AddTagModal from './src/components/modals/AddTagModal';
 import Landing from './src/screens/authentication/Landing';
 import Settings from './src/screens/bottom-tabs/Settings';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import DrawerNavigator from './src/navigation/DrawerNavigator';
+import { useDimensions } from './src/hooks/useDimensions';
 
 type TAB_NAMES = 'Dashboard' | 'Add' | 'Setting'
 
@@ -29,15 +33,18 @@ const App = () => {
     const dimensions = useDimensions()
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{
-                headerShown: false
-            }}>
-                <Stack.Screen name='Landing' component={Landing} />
-                <Stack.Screen name='Home' component={MainBottomTab} />
-            </Stack.Navigator>
-            <FlashMessage position='top' />
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator screenOptions={{
+                    headerShown: false
+                }}>
+                    <Stack.Screen name='Landing' component={Landing} />
+                    <Stack.Screen name='Home' component={DrawerNavigator} />
+                    {/* <Stack.Screen name='Home' component={BottomTab} /> */}
+                </Stack.Navigator>
+                <FlashMessage position='top' />
+            </NavigationContainer>
+        </Provider>
     )
 };
 
@@ -47,7 +54,7 @@ const AddModal = () => {
     )
 }
 
-const MainBottomTab = () => {
+export const BottomTab = () => {
     const Tab = createBottomTabNavigator()
 
     // const userData = useAppSelector(selectUserData)
@@ -76,6 +83,7 @@ const MainBottomTab = () => {
                 contentOnPress={() => textInputRef.current?.blur()}
                 flashMessageRef={modalFlashRef}
             />
+
             <Tab.Navigator
                 tabBarOptions={{
                     style: styles.tabBar,
