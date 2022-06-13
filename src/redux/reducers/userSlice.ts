@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction, SliceCaseReducers } from "@reduxjs/toolkit"
+import { createGenericSlice } from "../GenericSlice"
 import { RootState } from "../store"
 
 export interface MonetaryData {
@@ -31,15 +32,17 @@ const initialState: UserDataState = {
     }
 }
 
-export const userDataSlice = createSlice({
-    name: 'user',
-    initialState,
-    reducers: {
-        setUserData: (state, action: PayloadAction<UserData>) => {
-            state.user = action.payload
-        }
+const reducers: SliceCaseReducers<UserDataState> = {
+    setUserData: (state, action: PayloadAction<UserData>) => {
+        state.user = action.payload
     }
-})
+}
+
+export const userDataSlice = createGenericSlice<UserDataState>(
+    'user',
+    initialState,
+    reducers
+)
 
 export const { setUserData } = userDataSlice.actions
 

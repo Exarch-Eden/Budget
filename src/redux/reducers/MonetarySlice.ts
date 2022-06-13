@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction, SliceCaseReducers } from "@reduxjs/toolkit"
 
 import { MonetaryData } from "../../constants/types/monetary-types"
 import { ReducerFunc } from "../../constants/types/redux"
+import { createGenericSlice } from "../GenericSlice"
 import { RootState } from "../store"
 
 interface MonetaryRedux {
@@ -58,14 +59,16 @@ const setExpensesLocal: IncomeExpenseSetter = (state, action) => {
     state.expensesVal = monetaryDataReducer(action.payload)
 }
 
-export const monetaryDataSlice = createSlice({
-    name: 'monetary',
+const reducers: SliceCaseReducers<MonetaryRedux> = {
+    setIncome: setIncomeLocal,
+    setExpenses: setExpensesLocal
+}
+
+export const monetaryDataSlice = createGenericSlice(
+    'monetary',
     initialState,
-    reducers: {
-        setIncome: setIncomeLocal,
-        setExpenses: setExpensesLocal
-    }
-})
+    reducers
+)
 
 export const { setIncome, setExpenses } = monetaryDataSlice.actions
 

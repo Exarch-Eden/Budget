@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, SliceCaseReducers } from "@reduxjs/toolkit";
+import { createGenericSlice } from "../GenericSlice";
 import { RootState } from "../store";
 
 interface ActivityState {
@@ -9,16 +10,18 @@ const initialState: ActivityState = {
     initialRender: true
 }
 
-export const activitySlice = createSlice({
-    name: 'activity',
-    initialState,
-    reducers: {
-        passInitialRender: (state) => {
-            console.log('app no longer in initial render');
-            state.initialRender = false
-        }
+const reducers: SliceCaseReducers<ActivityState> = {
+    passInitialRender: (state) => {
+        console.log('app no longer in initial render');
+        state.initialRender = false
     }
-})
+}
+
+export const activitySlice = createGenericSlice<ActivityState>(
+    'activity',
+    initialState,
+    reducers
+)
 
 export const { passInitialRender } = activitySlice.actions
 
