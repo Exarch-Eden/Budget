@@ -1,13 +1,15 @@
-import React from "react"
+import React from "react";
 
-export type InfoSlideType = 'spend' | 'all'
+export type InfoSlideType = "spend" | "all";
 
 export interface InfoSlideData {
-    type: InfoSlideType
+    type: InfoSlideType;
 }
 
 interface InfoSlideRenderFuncParams {
-    item: InfoSlideData
+    item: InfoSlideData;
 }
 
-export type InfoSlideRenderFunc = (params: InfoSlideRenderFuncParams) => React.ReactElement
+export type InfoSlideRenderFunc = (
+    params: InfoSlideRenderFuncParams
+) => React.ReactElement;

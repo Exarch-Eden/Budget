@@ -2,8 +2,8 @@ import {
     createSlice,
     Slice,
     SliceCaseReducers,
-    ValidateSliceCaseReducers
-} from "@reduxjs/toolkit"
+    ValidateSliceCaseReducers,
+} from "@reduxjs/toolkit";
 
 export const createGenericSlice = <State>(
     name: string,
@@ -13,6 +13,6 @@ export const createGenericSlice = <State>(
     return createSlice({
         name,
         initialState,
-        reducers
-    })
-}
+        reducers,
+    });
+};

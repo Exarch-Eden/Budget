@@ -4,7 +4,7 @@ import { createGenericSlice } from "../GenericSlice";
 import { RootState } from "../store";
 
 interface DimensionsReducer {
-    dimensions: Dimensions
+    dimensions: Dimensions;
 }
 
 const initialState: DimensionsReducer = {
@@ -13,59 +13,63 @@ const initialState: DimensionsReducer = {
         screenHeight: 0,
         windowWidth: 0,
         windowHeight: 0,
-    }
-}
+    },
+};
 
 const reducers: SliceCaseReducers<DimensionsReducer> = {
     setDimensions: (state, action: PayloadAction<Partial<Dimensions>>) => {
-        console.log('Setting dimensions redux: \n', action.payload);
-        
+        console.log("Setting dimensions redux: \n", action.payload);
+
         state.dimensions = {
             ...state.dimensions,
-            ...action.payload
-        }
+            ...action.payload,
+        };
     },
     setWindowWidth: (state, action: PayloadAction<number>) => {
-        console.log('Setting window width redux: ', action.payload);
-        
-        state.dimensions.windowWidth = action.payload
+        console.log("Setting window width redux: ", action.payload);
+
+        state.dimensions.windowWidth = action.payload;
     },
     setWindowHeight: (state, action: PayloadAction<number>) => {
-        console.log('Setting window height redux: ', action.payload);
-        
-        state.dimensions.windowHeight = action.payload
+        console.log("Setting window height redux: ", action.payload);
+
+        state.dimensions.windowHeight = action.payload;
     },
     setScreenWidth: (state, action: PayloadAction<number>) => {
-        console.log('Setting screen width redux: ', action.payload);
-        
-        state.dimensions.screenWidth = action.payload
+        console.log("Setting screen width redux: ", action.payload);
+
+        state.dimensions.screenWidth = action.payload;
     },
     setScreenHeight: (state, action: PayloadAction<number>) => {
-        console.log('Setting screen height redux: ', action.payload);
-        
-        state.dimensions.screenHeight = action.payload
+        console.log("Setting screen height redux: ", action.payload);
+
+        state.dimensions.screenHeight = action.payload;
     },
-}
+};
 
 export const DimensionsSlice = createGenericSlice<DimensionsReducer>(
-    'dimensions',
+    "dimensions",
     initialState,
     reducers
-)
+);
 
 export const {
     setDimensions,
     setWindowWidth,
     setWindowHeight,
     setScreenWidth,
-    setScreenHeight
-} = DimensionsSlice.actions
+    setScreenHeight,
+} = DimensionsSlice.actions;
 
-export const selectDimensions = (state: RootState) => state.dimensions.dimensions;
-export const selectScreenWidth = (state: RootState) => state.dimensions.dimensions.screenWidth;
-export const selectScreenHeight = (state: RootState) => state.dimensions.dimensions.screenHeight;
-export const selectWindowWidth = (state: RootState) => state.dimensions.dimensions.windowWidth;
-export const selectWindowHeight = (state: RootState) => state.dimensions.dimensions.windowHeight;
+export const selectDimensions = (state: RootState) =>
+    state.dimensions.dimensions;
+export const selectScreenWidth = (state: RootState) =>
+    state.dimensions.dimensions.screenWidth;
+export const selectScreenHeight = (state: RootState) =>
+    state.dimensions.dimensions.screenHeight;
+export const selectWindowWidth = (state: RootState) =>
+    state.dimensions.dimensions.windowWidth;
+export const selectWindowHeight = (state: RootState) =>
+    state.dimensions.dimensions.windowHeight;
 
-
-export default DimensionsSlice.reducer
+export default DimensionsSlice.reducer;

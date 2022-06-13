@@ -1,6 +1,6 @@
-import themeImport from './theme'
-import stylesImport from './styles'
+import themeImport from "./theme";
+import stylesImport from "./styles";
 
-export const THEME = themeImport
+export const THEME = themeImport;
 
-export const STYLES = stylesImport
+export const STYLES = stylesImport;

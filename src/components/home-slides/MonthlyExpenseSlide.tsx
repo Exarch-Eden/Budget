@@ -1,60 +1,60 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Dimensions, LayoutChangeEvent, ScrollView, View } from 'react-native'
-import Svg, { SvgXml } from 'react-native-svg'
-import { AnimationStyle } from 'victory-core'
-import { VictoryPie, VictoryAnimation, VictoryLabel } from 'victory-native'
+import React, { FC, useEffect, useState } from "react";
+import { Dimensions, LayoutChangeEvent, ScrollView, View } from "react-native";
+import Svg, { SvgXml } from "react-native-svg";
+import { AnimationStyle } from "victory-core";
+import { VictoryPie, VictoryAnimation, VictoryLabel } from "victory-native";
 
-import Text from '../Text'
-import { filterSvg } from '../../assets/svgs'
-import { MonetaryData } from '../../constants/types/monetary-types'
-import { STYLES, THEME } from '../../styles'
-import MonthlyExpenseList from './MonthlyExpenseList'
-import { useExpenseDimensions } from '../../hooks/useExpenseDimensions'
+import Text from "../Text";
+import { filterSvg } from "../../assets/svgs";
+import { MonetaryData } from "../../constants/types/monetary-types";
+import { STYLES, THEME } from "../../styles";
+import MonthlyExpenseList from "./MonthlyExpenseList";
+import { useExpenseDimensions } from "../../hooks/useExpenseDimensions";
 
-const deviceWidth = Dimensions.get('window').width
-const PIE_WIDTH = deviceWidth
-const PIE_HEIGHT = 300
-const PIE_RADIUS = 150
-const PIE_INNER_RAD = PIE_RADIUS - 10
+const deviceWidth = Dimensions.get("window").width;
+const PIE_WIDTH = deviceWidth;
+const PIE_HEIGHT = 300;
+const PIE_RADIUS = 150;
+const PIE_INNER_RAD = PIE_RADIUS - 10;
 
 // TODO: remove later
 const DUMMY_DATA = [
     {
         y: 1,
         // color: THEME.SECONDARY.Green
-        color: THEME.PRIMARY.Green
+        color: THEME.PRIMARY.Green,
     },
     {
         y: 1,
         // color: THEME.SECONDARY.Yellow
-        color: THEME.PRIMARY.Yellow
+        color: THEME.PRIMARY.Yellow,
     },
     {
         y: 1,
         // color: THEME.SECONDARY.Red
-        color: THEME.PRIMARY.Red
-    }
-]
+        color: THEME.PRIMARY.Red,
+    },
+];
 
 // TODO: remove later
-const AVERAGE_SPENDING = 200
+const AVERAGE_SPENDING = 200;
 
 interface MonthlyExpenseSlideProps {
-    curMonthlyExpenses: MonetaryData[],
-    spendEndAngle: number
+    curMonthlyExpenses: MonetaryData[];
+    spendEndAngle: number;
 }
 
 const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
     curMonthlyExpenses,
-    spendEndAngle
+    spendEndAngle,
 }) => {
     const {
         expenseViewWidth,
         expenseListHeight,
         setExpenseViewWidth,
         setExpenseViewHeight,
-        setExpenseListY
-    } = useExpenseDimensions()
+        setExpenseListY,
+    } = useExpenseDimensions();
 
     // the label rendered in the middle of the half-pie
     const TotalMonthlyExpenseLabel = (props: AnimationStyle) => {
@@ -62,36 +62,38 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
         // because desired height for half-pie
         // has denumerator of 2; divide by 2 again
         // to put the label in the middle of the half-pie
-        const labelY = PIE_HEIGHT / 4
+        const labelY = PIE_HEIGHT / 4;
 
         return (
             <VictoryLabel
-                textAnchor='middle'
-                verticalAnchor='middle'
+                textAnchor="middle"
+                verticalAnchor="middle"
                 x={expenseViewWidth / 2}
                 y={labelY}
                 text={`$${props.target}`}
                 style={{
                     // changes text colour
                     fill: THEME.PRIMARY.Light,
-                    fontSize: STYLES.textLarge.fontSize
+                    fontSize: STYLES.textLarge.fontSize,
                 }}
             />
-        )
-    }
+        );
+    };
 
     return (
         <ScrollView
-            onLayout={e => {
-                setExpenseViewWidth(e.nativeEvent.layout.width)
-                setExpenseViewHeight(e.nativeEvent.layout.height)
+            onLayout={(e) => {
+                setExpenseViewWidth(e.nativeEvent.layout.width);
+                setExpenseViewHeight(e.nativeEvent.layout.height);
             }}
         >
-            <Text size='large' numberOfLines={1}>Recent Spendings</Text>
+            <Text size="large" numberOfLines={1}>
+                Recent Spendings
+            </Text>
             {/* Svg height is half of pie because we are only using the top half */}
             <Svg
                 height={PIE_HEIGHT / 2}
-                width='100%'
+                width="100%"
                 style={{
                     marginVertical: 20,
                 }}
@@ -112,8 +114,8 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
                     style={{
                         data: {
                             fill: ({ datum }) => datum.color,
-                            opacity: 0.6
-                        }
+                            opacity: 0.6,
+                        },
                     }}
                 />
                 {/* TODO: add circle at the head of the slice (bar) */}
@@ -134,40 +136,49 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
                     style={{
                         data: {
                             fill: THEME.PRIMARY.Green,
-
-                        }
+                        },
                     }}
-                // dataComponent={
-                //     <>
-                //         <Slice
+                    // dataComponent={
+                    //     <>
+                    //         <Slice
 
-                //             // style={{ fill: 'green' }}
-                //         />
-                //         {/* <Circle style={{ fill: 'green' }} /> */}
-                //     </>
-                // }
+                    //             // style={{ fill: 'green' }}
+                    //         />
+                    //         {/* <Circle style={{ fill: 'green' }} /> */}
+                    //     </>
+                    // }
                 />
                 <VictoryAnimation
                     duration={1000}
                     data={{
-                        target: curMonthlyExpenses.reduce(
-                            (prev, cur) => {
-                                return {
-                                    value: prev.value + cur.value
+                        target: curMonthlyExpenses
+                            .reduce(
+                                (prev, cur) => {
+                                    return {
+                                        value: prev.value + cur.value,
+                                    };
+                                },
+                                {
+                                    value: 0,
                                 }
-                            }, {
-                            value: 0
-                        }
-                        ).value.toFixed(2)
+                            )
+                            .value.toFixed(2),
                     }}
                 >
                     {TotalMonthlyExpenseLabel}
                 </VictoryAnimation>
             </Svg>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                }}
+            >
                 <View>
                     {/* height of 32px is same height as svg filter icon on the right */}
-                    <Text style={{ height: 32, textAlignVertical: 'center' }}>Highest Monthly Expenses</Text>
+                    <Text style={{ height: 32, textAlignVertical: "center" }}>
+                        Highest Monthly Expenses
+                    </Text>
                 </View>
                 <View>
                     {/* TODO: wrap svg in TouchableOpacity and allow filter for category/names */}
@@ -176,17 +187,19 @@ const MonthlyExpenseSlide: FC<MonthlyExpenseSlideProps> = ({
             </View>
             <MonthlyExpenseList
                 curMonthlyExpenses={curMonthlyExpenses}
-                style={expenseListHeight
-                    ? {
-                        height: expenseListHeight
-                    } : undefined
+                style={
+                    expenseListHeight
+                        ? {
+                              height: expenseListHeight,
+                          }
+                        : undefined
                 }
-                onLayout={e => {
-                    setExpenseListY(e.nativeEvent.layout.y)
+                onLayout={(e) => {
+                    setExpenseListY(e.nativeEvent.layout.y);
                 }}
             />
         </ScrollView>
-    )
-}
+    );
+};
 
-export default MonthlyExpenseSlide
+export default MonthlyExpenseSlide;

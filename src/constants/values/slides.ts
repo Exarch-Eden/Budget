@@ -2,10 +2,8 @@ import { InfoSlideData } from "../types/slides";
 
 const INFO_SLIDES: InfoSlideData[] = [
     {
-        type: 'spend'
-    }
-]
+        type: "spend",
+    },
+];
 
-export {
-    INFO_SLIDES
-}
+export { INFO_SLIDES };
