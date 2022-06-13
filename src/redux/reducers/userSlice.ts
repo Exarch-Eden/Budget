@@ -22,11 +22,11 @@ export interface UserData {
     tags?: string[];
 }
 
-interface UserDataState {
+interface UserRedux {
     user: UserData;
 }
 
-const initialState: UserDataState = {
+const initialState: UserRedux = {
     user: {
         income: [],
         expenses: [],
@@ -36,13 +36,13 @@ const initialState: UserDataState = {
     },
 };
 
-const reducers: SliceCaseReducers<UserDataState> = {
+const reducers: SliceCaseReducers<UserRedux> = {
     setUserData: (state, action: PayloadAction<UserData>) => {
         state.user = action.payload;
     },
 };
 
-export const userDataSlice = createGenericSlice<UserDataState>(
+export const userDataSlice = createGenericSlice<UserRedux>(
     "user",
     initialState,
     reducers

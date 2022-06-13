@@ -3,11 +3,11 @@ import { Dimensions } from "../../constants/types/dimensions";
 import { createGenericSlice } from "../GenericSlice";
 import { RootState } from "../store";
 
-interface DimensionsReducer {
+interface DimensionsRedux {
     dimensions: Dimensions;
 }
 
-const initialState: DimensionsReducer = {
+const initialState: DimensionsRedux = {
     dimensions: {
         screenWidth: 0,
         screenHeight: 0,
@@ -16,7 +16,7 @@ const initialState: DimensionsReducer = {
     },
 };
 
-const reducers: SliceCaseReducers<DimensionsReducer> = {
+const reducers: SliceCaseReducers<DimensionsRedux> = {
     setDimensions: (state, action: PayloadAction<Partial<Dimensions>>) => {
         console.log("Setting dimensions redux: \n", action.payload);
 
@@ -47,7 +47,7 @@ const reducers: SliceCaseReducers<DimensionsReducer> = {
     },
 };
 
-export const DimensionsSlice = createGenericSlice<DimensionsReducer>(
+export const DimensionsSlice = createGenericSlice<DimensionsRedux>(
     "dimensions",
     initialState,
     reducers

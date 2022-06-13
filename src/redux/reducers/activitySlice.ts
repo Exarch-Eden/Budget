@@ -6,22 +6,22 @@ import {
 import { createGenericSlice } from "../GenericSlice";
 import { RootState } from "../store";
 
-interface ActivityState {
+interface ActivityRedux {
     initialRender: boolean;
 }
 
-const initialState: ActivityState = {
+const initialState: ActivityRedux = {
     initialRender: true,
 };
 
-const reducers: SliceCaseReducers<ActivityState> = {
+const reducers: SliceCaseReducers<ActivityRedux> = {
     passInitialRender: (state) => {
         console.log("app no longer in initial render");
         state.initialRender = false;
     },
 };
 
-export const activitySlice = createGenericSlice<ActivityState>(
+export const activitySlice = createGenericSlice<ActivityRedux>(
     "activity",
     initialState,
     reducers
