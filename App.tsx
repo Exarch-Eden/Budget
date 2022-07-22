@@ -1,13 +1,7 @@
 import "react-native-gesture-handler";
-import React, { createRef, useEffect, useRef, useState } from "react";
-import {
-    AsyncStorage,
-    Image,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import React, { useEffect } from 'react'
+import { createRef, useRef, useState } from "react";
+import { StyleSheet, TextInput } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -15,29 +9,32 @@ import Home from "./src/screens/bottom-tabs/Home";
 import { Provider } from "react-redux";
 import { store } from "./src/redux/store";
 import FlashMessage from "react-native-flash-message";
-import { STYLES, THEME } from "./src/styles";
+import { THEME } from "./src/styles";
 import { homeSvg, addSvg, settingsSvg } from "./src/assets/svgs/navigation";
 import { SvgXml } from "react-native-svg";
 import GenericModal from "./src/components/GenericModal";
-import { useAppDispatch, useAppSelector } from "./src/redux/hooks";
-import { selectUserData, setUserData } from "./src/redux/reducers/UserSlice";
-import moment from "moment";
-import Button from "./src/components/Button";
-import Text from "./src/components/Text";
 import AddValueModal from "./src/components/modals/AddValueModal";
-import { ChosenMonetaryType } from "./src/constants/types/monetary-types";
 import AddTagModal from "./src/components/modals/AddTagModal";
 import Landing from "./src/screens/authentication/Landing";
 import Settings from "./src/screens/bottom-tabs/Settings";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerNavigator from "./src/navigation/DrawerNavigator";
 import useDimensions from "./src/hooks/useDimensions";
+import { Splash } from "./src/screens";
+import { RootStackParamList } from "./src/constants/types/navigation";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
-    const Stack = createStackNavigator();
+    const Stack = createStackNavigator<RootStackParamList>();
     const dimensions = useDimensions();
+
+    /**
+     * Checks to see if user is a guest and has already used the app prior.
+     * If so, skip Landing page, and go straight to Home page.
+     */
+    useEffect(() => {
+        
+    }, [])
 
     return (
         <Provider store={store}>
@@ -46,7 +43,9 @@ const App = () => {
                     screenOptions={{
                         headerShown: false,
                     }}
+                    initialRouteName="Splash"
                 >
+                    <Stack.Screen name="Splash" component={Splash} />
                     <Stack.Screen name="Landing" component={Landing} />
                     <Stack.Screen name="Home" component={DrawerNavigator} />
                     {/* <Stack.Screen name='Home' component={BottomTab} /> */}
