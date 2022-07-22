@@ -68,4 +68,4 @@ const useDimensions = () => {
     return dimensions;
 };
 
-export { useDimensions };
+export default useDimensions

@@ -31,7 +31,7 @@ import Landing from "./src/screens/authentication/Landing";
 import Settings from "./src/screens/bottom-tabs/Settings";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerNavigator from "./src/navigation/DrawerNavigator";
-import { useDimensions } from "./src/hooks/useDimensions";
+import useDimensions from "./src/hooks/useDimensions";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
