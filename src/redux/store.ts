@@ -1,15 +1,19 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import UserDataReducer from "./reducers/UserSlice";
-import ActivityReducer from "./reducers/ActivitySlice";
-import MonetaryReducer from "./reducers/MonetarySlice";
-import DimensionsReducer from "./reducers/DimensionsSlice";
+import {
+    ActivitySlice,
+    DimensionsSlice,
+    LoadingSlice,
+    MonetarySlice,
+    UserSlice,
+} from "./reducers";
 
 export const store = configureStore({
     reducer: {
-        user: UserDataReducer,
-        activity: ActivityReducer,
-        monetary: MonetaryReducer,
-        dimensions: DimensionsReducer,
+        Activity: ActivitySlice,
+        Dimensions: DimensionsSlice,
+        Loading: LoadingSlice,
+        Monetary: MonetarySlice,
+        User: UserSlice,
     },
 });
 
