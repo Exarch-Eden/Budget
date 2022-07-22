@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AsyncStorage, StyleSheet, TextInput, View } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";

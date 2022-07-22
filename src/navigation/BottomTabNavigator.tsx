@@ -1,5 +1,5 @@
 import React, { createRef, useRef, useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FlashMessage from "react-native-flash-message";
 import { SvgXml } from "react-native-svg";

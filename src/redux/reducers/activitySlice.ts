@@ -1,8 +1,4 @@
-import {
-    createSlice,
-    PayloadAction,
-    SliceCaseReducers,
-} from "@reduxjs/toolkit";
+import { SliceCaseReducers } from "@reduxjs/toolkit";
 import { createGenericSlice } from "../GenericSlice";
 import { RootState } from "../store";
 

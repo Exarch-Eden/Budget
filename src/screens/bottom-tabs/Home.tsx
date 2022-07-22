@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import { PieChartData } from "react-native-svg-charts";
 import MonthlyExpenseSlide from "../../components/home-slides/MonthlyExpenseSlide";
 import Page from "../../components/Page";
 
-import Text from "../../components/Text";
 import { InfoSlideRenderFunc } from "../../constants/types/slides";
 
 import { INFO_SLIDES } from "../../constants/values/slides";
@@ -15,7 +15,6 @@ import {
     selectExpensesVal,
     selectIncomeVal,
 } from "../../redux/reducers/MonetarySlice";
-import { STYLES } from "../../styles";
 
 const Home = () => {
     const deviceWidth = Dimensions.get("window").width;

@@ -1,13 +1,5 @@
 import React, { FC } from "react";
-import {
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
-    Animated,
-} from "react-native";
+import { Modal, StyleSheet, TouchableWithoutFeedback, View, Animated } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { THEME } from "../styles";
 import Button from "./Button";

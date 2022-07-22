@@ -1,8 +1,4 @@
-import {
-    createSlice,
-    PayloadAction,
-    SliceCaseReducers,
-} from "@reduxjs/toolkit";
+import { SliceCaseReducers } from "@reduxjs/toolkit";
 
 import { MonetaryData } from "../../constants/types/monetary-types";
 import { ReducerFunc } from "../../constants/types/redux";

@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
-import { Dimensions, LayoutChangeEvent, ScrollView, View } from "react-native";
+import React, { FC } from "react";
+import { Dimensions, ScrollView, View } from "react-native";
 import Svg, { SvgXml } from "react-native-svg";
 import { AnimationStyle } from "victory-core";
 import { VictoryPie, VictoryAnimation, VictoryLabel } from "victory-native";
