@@ -9,7 +9,7 @@ import { filterSvg } from "../../assets/svgs";
 import { MonetaryData } from "../../constants/types/monetary-types";
 import { STYLES, THEME } from "../../styles";
 import MonthlyExpenseList from "./MonthlyExpenseList";
-import { useExpenseDimensions } from "../../hooks/useExpenseDimensions";
+import useExpenseDimensions from "../../hooks/useExpenseDimensions";
 
 const deviceWidth = Dimensions.get("window").width;
 const PIE_WIDTH = deviceWidth;
