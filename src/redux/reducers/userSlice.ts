@@ -39,13 +39,13 @@ const reducers: SliceCaseReducers<UserRedux> = {
 };
 
 export const userDataSlice = createGenericSlice<UserRedux>(
-    "user",
+    "User",
     initialState,
     reducers
 );
 
 export const { setUserData } = userDataSlice.actions;
 
-export const selectUserData = (state: RootState) => state.user.user;
+export const selectUserData = (state: RootState) => state.User.user;
 
 export default userDataSlice.reducer;

@@ -48,7 +48,7 @@ const reducers: SliceCaseReducers<DimensionsRedux> = {
 };
 
 export const DimensionsSlice = createGenericSlice<DimensionsRedux>(
-    "dimensions",
+    "Dimensions",
     initialState,
     reducers
 );
@@ -62,14 +62,14 @@ export const {
 } = DimensionsSlice.actions;
 
 export const selectDimensions = (state: RootState) =>
-    state.dimensions.dimensions;
+    state.Dimensions.dimensions;
 export const selectScreenWidth = (state: RootState) =>
-    state.dimensions.dimensions.screenWidth;
+    state.Dimensions.dimensions.screenWidth;
 export const selectScreenHeight = (state: RootState) =>
-    state.dimensions.dimensions.screenHeight;
+    state.Dimensions.dimensions.screenHeight;
 export const selectWindowWidth = (state: RootState) =>
-    state.dimensions.dimensions.windowWidth;
+    state.Dimensions.dimensions.windowWidth;
 export const selectWindowHeight = (state: RootState) =>
-    state.dimensions.dimensions.windowHeight;
+    state.Dimensions.dimensions.windowHeight;
 
 export default DimensionsSlice.reducer;

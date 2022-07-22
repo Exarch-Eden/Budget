@@ -67,18 +67,18 @@ const reducers: SliceCaseReducers<MonetaryRedux> = {
 };
 
 export const monetaryDataSlice = createGenericSlice(
-    "monetary",
+    "Monetary",
     initialState,
     reducers
 );
 
 export const { setIncome, setExpenses } = monetaryDataSlice.actions;
 
-export const selectIncome = (state: RootState) => state.monetary.income;
-export const selectExpenses = (state: RootState) => state.monetary.expenses;
+export const selectIncome = (state: RootState) => state.Monetary.income;
+export const selectExpenses = (state: RootState) => state.Monetary.expenses;
 
-export const selectIncomeVal = (state: RootState) => state.monetary.incomeVal;
+export const selectIncomeVal = (state: RootState) => state.Monetary.incomeVal;
 export const selectExpensesVal = (state: RootState) =>
-    state.monetary.expensesVal;
+    state.Monetary.expensesVal;
 
 export default monetaryDataSlice.reducer;

@@ -18,7 +18,7 @@ const reducers: SliceCaseReducers<ActivityRedux> = {
 };
 
 export const activitySlice = createGenericSlice<ActivityRedux>(
-    "activity",
+    "Activity",
     initialState,
     reducers
 );
@@ -26,6 +26,6 @@ export const activitySlice = createGenericSlice<ActivityRedux>(
 export const { passInitialRender } = activitySlice.actions;
 
 export const selectInitialRender = (state: RootState) =>
-    state.activity.initialRender;
+    state.Activity.initialRender;
 
 export default activitySlice.reducer;
