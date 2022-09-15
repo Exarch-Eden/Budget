@@ -21,10 +21,12 @@ import DrawerNavigator from "./src_old/navigation/DrawerNavigator";
 import useDimensions from "./src_old/hooks/useDimensions";
 import { Splash } from "./src_old/screens";
 import { RootStackParamList } from "./src_old/constants/types/navigation";
+import BottomNav from "./src/features/bottom-nav/BottomNav";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
+    const Stack = createStackNavigator();
     // const Stack = createStackNavigator<RootStackParamList>();
     // useDimensions();
 
@@ -37,9 +39,11 @@ const App = () => {
     }, [])
 
     return (
-        <View>
-            <Text>App tsx</Text>
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="BottomNav" component={BottomNav} />
+            </Stack.Navigator>
+        </NavigationContainer>
         // <Provider store={store}>
         //     <NavigationContainer>
         //         <Stack.Navigator
