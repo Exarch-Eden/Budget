@@ -27,14 +27,20 @@ type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
     const Stack = createStackNavigator();
+
     // const Stack = createStackNavigator<RootStackParamList>();
     // useDimensions();
 
-    /**
-     * Checks to see if user is a guest and has already used the app prior.
-     * If so, skip Landing page, and go straight to Home page.
-     */
     useEffect(() => {
+        /**
+         * Initializing dimension values
+         */
+
+
+        /**
+         * Checks to see if user is a guest and has already used the app prior.
+         * If so, skip Landing page, and go straight to Home page.
+         */
         
     }, [])
 
