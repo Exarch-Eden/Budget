@@ -7,3 +7,10 @@ export type Timestamp = number // moment() should always be used to determine ti
 export type Currency = "CAD" | "USD"
 
 export type PaymentMethod = "Cash" | "Debit" | "Credit"
+
+export interface Dimensions {
+    screenWidth: number;
+    screenHeight: number;
+    windowWidth: number;
+    windowHeight: number;
+}
