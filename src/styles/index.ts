@@ -18,6 +18,12 @@ const COLORS = {
     }
 }
 
+const SPACING = {
+    BORDER_RADIUS: 9.03, // for border radius
+    GENERAL: 18 // for general margins and padding
+}
+
 export {
-    COLORS
+    COLORS,
+    SPACING
 }
