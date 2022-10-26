@@ -14,3 +14,5 @@ export interface Dimensions {
     windowWidth: number;
     windowHeight: number;
 }
+
+export type TextSize = "small" | "medium" | "large"
