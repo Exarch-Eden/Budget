@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native"
+
 const COLORS = {
     PRIMARY: {
         Dark: "#1F1C1F",
@@ -23,7 +25,23 @@ const SPACING = {
     GENERAL: 18 // for general margins and padding
 }
 
+const TEXT = StyleSheet.create({
+    Small: {
+        color: COLORS.PRIMARY.Light,
+        fontSize: 16
+    },
+    Medium: {
+        color: COLORS.PRIMARY.Light,
+        fontSize: 20
+    },
+    Large: {
+        color: COLORS.PRIMARY.Light,
+        fontSize: 24
+    },
+})
+
 export {
     COLORS,
-    SPACING
+    SPACING,
+    TEXT
 }
