@@ -5,6 +5,7 @@ import {
     createSlice,
     ValidateSliceCaseReducers,
 } from "@reduxjs/toolkit";
+import { Dimensions as DimensionsNative } from "react-native";
 import { Dimensions } from "../../types/misc";
 import { RootState } from "../store";
 
@@ -14,10 +15,10 @@ interface DimensionsReducer {
 
 const initialState: DimensionsReducer = {
     dimensions: {
-        screenWidth: 0,
-        screenHeight: 0,
-        windowWidth: 0,
-        windowHeight: 0,
+        windowWidth: DimensionsNative.get("window").width,
+        windowHeight: DimensionsNative.get("window").height,
+        screenWidth: DimensionsNative.get("screen").width,
+        screenHeight: DimensionsNative.get("screen").height,
     },
 };
 
