@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 import { createRef, useRef, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -18,15 +18,18 @@ import AddTagModal from "./src_old/components/modals/AddTagModal";
 import Landing from "./src_old/screens/authentication/Landing";
 import Settings from "./src_old/screens/bottom-tabs/Settings";
 import DrawerNavigator from "./src_old/navigation/DrawerNavigator";
-import useDimensions from "./src_old/hooks/useDimensions";
+
 import { Splash } from "./src_old/screens";
 import { RootStackParamList } from "./src_old/constants/types/navigation";
 import BottomNav from "./src/features/bottom-nav/BottomNav";
+import useDimensions from "./src/hooks/useDimensions";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
     const Stack = createStackNavigator();
+
+    const { setDimensions } = useDimensions()
 
     // const Stack = createStackNavigator<RootStackParamList>();
     // useDimensions();
@@ -35,14 +38,18 @@ const App = () => {
         /**
          * Initializing dimension values
          */
-
+        setDimensions({
+            windowWidth: Dimensions.get("window").width,
+            windowHeight: Dimensions.get("window").height,
+            screenWidth: Dimensions.get("screen").width,
+            screenHeight: Dimensions.get("screen").height,
+        })
 
         /**
          * Checks to see if user is a guest and has already used the app prior.
          * If so, skip Landing page, and go straight to Home page.
          */
-        
-    }, [])
+    }, []);
 
     return (
         <NavigationContainer>
@@ -147,7 +154,7 @@ const App = () => {
 // };
 
 const styles = StyleSheet.create({
-
+    
 });
 
 export default App;
