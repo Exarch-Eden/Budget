@@ -1,21 +1,63 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
+import { View, Dimensions, SafeAreaView, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-native-snap-carousel";
-import { Account } from "../../types/account.types";
+import { Account } from "../../types/account";
 import AccountCarousel from "./components/AccountCarousel";
+import { VictoryPie } from "victory-native";
+import { COLORS } from "../../styles";
+import DonutChart from "../universal/DonutChart";
+import Page from "../universal/Page";
+import ThemedText from "../universal/ThemedText";
+import useDimensions from "../../hooks/useDimensions";
 
 const Home = () => {
-    const [accounts, setAccounts] = useState<Account[]>([])
+    const { windowWidth, windowHeight } = useDimensions()
+
+    const [accounts, setAccounts] = useState<Account[]>([]);
+
+    const getCachedAccounts = async () => {
+        console.log("getCachedAccounts()");
+        // TODO: implement custom read write process for local data (replace async storage)
+        
+        try {
+            // TODO: implement async storage fetch logic to get account data
+
+            setAccounts([
+                {
+                    CreationDate: 123,
+                    Id: "123abc",
+                    Type: "Chequing",
+                    Name: "HSBC1"
+                }
+            ])
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getCachedAccounts() 
+    }, [])
 
     return (
-        <View>
-            <Text>Home</Text>
+        <Page>
+            <ThemedText>
+                Ligma
+            </ThemedText>
+            {/* <DonutChart /> */}
             <AccountCarousel
                 data={accounts}
-                sliderWidth={}
             />
-        </View>
+        </Page>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        // backgroundColor: COLORS.PRIMARY.Dark
+        backgroundColor: COLORS.PRIMARY.Dark,
+    },
+});
 
 export default Home;
