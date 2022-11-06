@@ -3,16 +3,29 @@ import React from "react";
 import { COLORS, SPACING } from "../../styles";
 
 interface RoundedContainerProps extends ViewProps {
-    children?: React.ReactNode
+    noPadding?: boolean;
+    children?: React.ReactNode;
 }
 
 const RoundedContainer: React.FC<RoundedContainerProps> = ({
     children,
     style,
+    noPadding,
     ...rest
 }) => {
     return (
-        <View style={[styles.container, style]} {...rest}>
+        <View
+            style={[
+                styles.container,
+                style,
+                noPadding
+                    ? {
+                          padding: 0,
+                      }
+                    : undefined,
+            ]}
+            {...rest}
+        >
             {React.Children.toArray(children)}
         </View>
     );
@@ -23,8 +36,8 @@ const styles = StyleSheet.create({
         borderRadius: SPACING.BORDER_RADIUS,
         padding: SPACING.GENERAL,
         backgroundColor: COLORS.SECONDARY.Dark,
-        flex: 1
-    }
-})
+        flex: 1,
+    },
+});
 
 export default RoundedContainer;
