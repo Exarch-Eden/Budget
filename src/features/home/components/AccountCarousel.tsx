@@ -16,6 +16,7 @@ import { COLORS, SPACING } from "../../../styles";
 import useDimensions from "../../../hooks/useDimensions";
 import { CHART_ANIMATION_DURATION_MS } from "../../../constants/chart";
 import Svg from "react-native-svg";
+import AccountPie from "./AccountPie";
 
 interface AccountCarouselProps
     extends Omit<CarouselProps<Account>, "renderItem"> {
@@ -28,7 +29,7 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
     const containerWidth = windowWidth * 0.9
     const containerHeight = windowHeight * 0.9
     const pieDimensions = containerWidth * 0.2214
-    const pieRadius = pieDimensions / 2
+    // NOTE: old code
     // const pieRadius = Dimensions.get("window").width / 2 - SPACING.GENERAL * 2
 
     useEffect(() => {
@@ -59,35 +60,7 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                     }}
                     noPadding
                 >
-                    <Svg
-                        height={pieDimensions}
-                        width={pieDimensions}
-                        // for testing purposes; TODO: remove later
-                        style={{
-                            borderColor: "blue",
-                            borderWidth: 1
-                        }}
-                    >
-                    <VictoryPie
-                        animate={{ duration: CHART_ANIMATION_DURATION_MS }}
-                        // for testing purposes; TODO: remove later                        
-                        data={[
-                            {
-                                y: 1,
-                                color: COLORS.PRIMARY.Green
-                            }
-                        ]}
-                        height={pieDimensions}
-                        width={pieDimensions}
-                        radius={pieRadius}
-                        innerRadius={pieRadius - SPACING.GENERAL}
-                        style={{
-                            data: {
-                                fill: ({ datum }) => datum.color
-                            },
-                        }}
-                    />
-                    </Svg>
+                    <AccountPie dimensions={pieDimensions} />
                 </RoundedContainer>
             </TouchableWithoutFeedback>
         );
