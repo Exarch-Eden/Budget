@@ -37,11 +37,9 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
             windowHeight
         });
 
-        console.log("pieDimensions:\n", pieDimensions);        
+        console.log("pieDimensions:\n", pieDimensions);
     }, [windowWidth, windowHeight])
     
-    
-
     const renderItem: ListRenderItem<Account> = ({ item, index }) => {
         return (
             <TouchableWithoutFeedback
@@ -64,8 +62,6 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                     <Svg
                         height={pieDimensions}
                         width={pieDimensions}
-                        // height={containerHeight}
-                        // width={containerWidth}
                         // for testing purposes; TODO: remove later
                         style={{
                             borderColor: "blue",
@@ -83,19 +79,13 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                         ]}
                         height={pieDimensions}
                         width={pieDimensions}
-                        // height={containerHeight}
-                        // width={containerWidth}
                         radius={pieRadius}
                         innerRadius={pieRadius - SPACING.GENERAL}
-                        // radius={pieRadius}
-                        // innerRadius={pieRadius - SPACING.GENERAL}
                         style={{
                             data: {
                                 fill: ({ datum }) => datum.color
                             },
                         }}
-                        // height={300}
-                        // width={Dimensions.get("window").width}
                     />
                     </Svg>
                 </RoundedContainer>
