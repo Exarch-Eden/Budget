@@ -5,14 +5,17 @@ import {
     ListRenderItem,
     StyleSheet,
     Dimensions,
+    TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect } from "react";
 import Carousel, { CarouselProps } from "react-native-snap-carousel";
 import { Account } from "../../../types/account";
 import RoundedContainer from "../../universal/RoundedContainer";
 import { VictoryPie } from "victory-native";
-import { COLORS } from "../../../styles";
+import { COLORS, SPACING } from "../../../styles";
 import useDimensions from "../../../hooks/useDimensions";
+import { CHART_ANIMATION_DURATION_MS } from "../../../constants/chart";
+import Svg from "react-native-svg";
 
 interface AccountCarouselProps
     extends Omit<CarouselProps<Account>, "renderItem"> {
@@ -22,34 +25,55 @@ interface AccountCarouselProps
 const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
     const { windowWidth, windowHeight } = useDimensions();
 
+    const containerWidth = windowWidth * 0.9
+    const containerHeight = windowHeight * 0.9
+    const pieDimensions = containerWidth * 0.2214
+    const pieRadius = pieDimensions / 2
+    // const pieRadius = Dimensions.get("window").width / 2 - SPACING.GENERAL * 2
+
     useEffect(() => {
         console.log("account carousel dimensions:\n", {
             windowWidth,
             windowHeight
         });
+
+        console.log("pieDimensions:\n", pieDimensions);        
     }, [windowWidth, windowHeight])
+    
+    
 
     const renderItem: ListRenderItem<Account> = ({ item, index }) => {
         return (
-            <TouchableOpacity
+            <TouchableWithoutFeedback
                 onPress={() => console.log("pressed account:\n")}
                 style={[
                     styles.accountContainer,
                     {
-                        width: windowWidth,
+                        width: containerWidth,
+                        height: containerHeight
                     },
                 ]}
             >
                 <RoundedContainer
-                    style={
-                        {
-                            // width: windowWidth * 0.9,
-                            // paddingHorizontal:
-                        }
-                    }
+                    style={{
+                        borderColor: "red",
+                        borderWidth: 1
+                    }}
+                    noPadding
                 >
-                    {/* <VictoryPie
-                        animate={{ duration: 500 }}
+                    <Svg
+                        height={pieDimensions}
+                        width={pieDimensions}
+                        // height={containerHeight}
+                        // width={containerWidth}
+                        // for testing purposes; TODO: remove later
+                        style={{
+                            borderColor: "blue",
+                            borderWidth: 1
+                        }}
+                    >
+                    <VictoryPie
+                        animate={{ duration: CHART_ANIMATION_DURATION_MS }}
                         // for testing purposes; TODO: remove later                        
                         data={[
                             {
@@ -57,11 +81,25 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                                 color: COLORS.PRIMARY.Green
                             }
                         ]}
-                        height={300}
-                        width={Dimensions.get("window").width}
-                    /> */}
+                        height={pieDimensions}
+                        width={pieDimensions}
+                        // height={containerHeight}
+                        // width={containerWidth}
+                        radius={pieRadius}
+                        innerRadius={pieRadius - SPACING.GENERAL}
+                        // radius={pieRadius}
+                        // innerRadius={pieRadius - SPACING.GENERAL}
+                        style={{
+                            data: {
+                                fill: ({ datum }) => datum.color
+                            },
+                        }}
+                        // height={300}
+                        // width={Dimensions.get("window").width}
+                    />
+                    </Svg>
                 </RoundedContainer>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
         );
     };
 
@@ -69,8 +107,8 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
         <Carousel
             data={data}
             sliderWidth={windowWidth || 300}
-            itemWidth={windowWidth * 0.9 || 300}
-            itemHeight={windowHeight * 0.9 || 300}
+            itemWidth={containerWidth || 300}
+            itemHeight={containerHeight || 300}
             renderItem={renderItem}
             {...rest}
         />
