@@ -40,9 +40,11 @@ const Home = () => {
     }, [])
 
     return (
-        <Page>
+        <Page style={{
+            alignItems: "center"
+        }}>
             <ThemedText>
-                Ligma
+                Dashboard
             </ThemedText>
             {/* <DonutChart /> */}
             <AccountCarousel
