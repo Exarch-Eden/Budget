@@ -17,6 +17,7 @@ import useDimensions from "../../../hooks/useDimensions";
 import { CHART_ANIMATION_DURATION_MS } from "../../../constants/chart";
 import Svg from "react-native-svg";
 import AccountPie from "./AccountPie";
+import AccountSummary from "./AccountSummary";
 
 interface AccountCarouselProps
     extends Omit<CarouselProps<Account>, "renderItem"> {
@@ -60,7 +61,7 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                     }}
                     noPadding
                 >
-                    <AccountPie dimensions={pieDimensions} />
+                    <AccountSummary pieDimensions={pieDimensions} />
                 </RoundedContainer>
             </TouchableWithoutFeedback>
         );
