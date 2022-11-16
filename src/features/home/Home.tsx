@@ -4,7 +4,7 @@ import Carousel from "react-native-snap-carousel";
 import { Account } from "../../types/account";
 import AccountCarousel from "./components/AccountCarousel";
 import { VictoryPie } from "victory-native";
-import { COLORS } from "../../styles";
+import { COLORS, TEXT } from "../../styles";
 import DonutChart from "../universal/DonutChart";
 import Page from "../universal/Page";
 import ThemedText from "../universal/ThemedText";
@@ -43,7 +43,7 @@ const Home = () => {
         <Page style={{
             alignItems: "center"
         }}>
-            <ThemedText>
+            <ThemedText style={TEXT.Large}>
                 Dashboard
             </ThemedText>
             {/* <DonutChart /> */}
