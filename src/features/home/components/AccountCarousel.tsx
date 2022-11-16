@@ -59,9 +59,8 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                         borderColor: "red",
                         borderWidth: 1
                     }}
-                    noPadding
                 >
-                    <AccountSummary pieDimensions={pieDimensions} />
+                    <AccountSummary accountId={item.Id} pieDimensions={pieDimensions} />
                 </RoundedContainer>
             </TouchableWithoutFeedback>
         );
