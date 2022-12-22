@@ -1,18 +1,24 @@
 import { View, Text, SafeAreaView, StyleSheet, ViewProps } from "react-native";
 import React from "react";
-import { COLORS } from "../../styles";
+import { COLORS, SPACING } from "../../styles";
 
 interface PageProps extends ViewProps {
-    children?: React.ReactNode[]
+    noPadding?: boolean;
+    children?: React.ReactNode[];
 }
 
-const Page: React.FC<PageProps> = ({
-    children,
-    style,
-    ...rest
-}) => {
+const Page: React.FC<PageProps> = ({ children, noPadding, style, ...rest }) => {
     return (
-        <SafeAreaView style={[styles.container, style]} {...rest}>
+        <SafeAreaView
+            style={[
+                styles.container,
+                {
+                    padding: noPadding ? 0 : SPACING.GENERAL,
+                },
+                style,
+            ]}
+            {...rest}
+        >
             {React.Children.toArray(children)}
         </SafeAreaView>
     );
@@ -21,8 +27,8 @@ const Page: React.FC<PageProps> = ({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.PRIMARY.Dark
-    }
-})
+        backgroundColor: COLORS.PRIMARY.Dark,
+    },
+});
 
 export default Page;
