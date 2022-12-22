@@ -1,5 +1,5 @@
 import { View, Dimensions, SafeAreaView, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Carousel from "react-native-snap-carousel";
 import { Account } from "../../types/account";
 import AccountCarousel from "./components/AccountCarousel";
@@ -40,9 +40,12 @@ const Home = () => {
     }, [])
 
     return (
-        <Page style={{
-            alignItems: "center"
-        }}>
+        <Page
+            
+            style={{
+                alignItems: "center"
+            }}
+        >
             <ThemedText style={TEXT.Large}>
                 Dashboard
             </ThemedText>
