@@ -5,7 +5,9 @@ import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./src_old/screens/bottom-tabs/Home";
+import { Provider as PaperProvider } from "react-native-paper"
+// import Home from "./src_old/screens/bottom-tabs/Home";
+import Home from "./src/features/home/Home";
 import { Provider } from "react-redux";
 import { store } from "./src_old/redux/store";
 import FlashMessage from "react-native-flash-message";
@@ -23,6 +25,7 @@ import { Splash } from "./src_old/screens";
 import { RootStackParamList } from "./src_old/constants/types/navigation";
 import BottomNav from "./src/features/bottom-nav/BottomNav";
 import useDimensions from "./src/hooks/useDimensions";
+import AddButton from "./src/features/universal/AddButton";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
@@ -51,28 +54,36 @@ const App = () => {
          */
     }, []);
 
+    // NOTE: old return code:
+    // <Provider store={store}>
+    //     <NavigationContainer>
+    //         <Stack.Navigator
+    //             screenOptions={{
+    //                 headerShown: false,
+    //             }}
+    //             initialRouteName="Splash"
+    //         >
+    //             <Stack.Screen name="Splash" component={Splash} />
+    //             <Stack.Screen name="Landing" component={Landing} />
+    //             <Stack.Screen name="Home" component={DrawerNavigator} />
+    //             {/* <Stack.Screen name='Home' component={BottomTab} /> */}
+    //         </Stack.Navigator>
+    //         <FlashMessage position="top" />
+    //     </NavigationContainer>
+    // </Provider>
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="BottomNav" component={BottomNav} />
-            </Stack.Navigator>
-        </NavigationContainer>
-        // <Provider store={store}>
-        //     <NavigationContainer>
-        //         <Stack.Navigator
-        //             screenOptions={{
-        //                 headerShown: false,
-        //             }}
-        //             initialRouteName="Splash"
-        //         >
-        //             <Stack.Screen name="Splash" component={Splash} />
-        //             <Stack.Screen name="Landing" component={Landing} />
-        //             <Stack.Screen name="Home" component={DrawerNavigator} />
-        //             {/* <Stack.Screen name='Home' component={BottomTab} /> */}
-        //         </Stack.Navigator>
-        //         <FlashMessage position="top" />
-        //     </NavigationContainer>
-        // </Provider>
+        <PaperProvider>
+            <NavigationContainer>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Home" component={Home} />
+                </Stack.Navigator>
+                <AddButton />
+                {/* NOTE: old code below (standard bottom nav) */}
+                {/* <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="BottomNav" component={BottomNav} />
+                </Stack.Navigator> */}
+            </NavigationContainer>
+        </PaperProvider>
     );
 };
 
