@@ -4,7 +4,7 @@ import { COLORS, SPACING } from "../../styles";
 
 interface PageProps extends ViewProps {
     noPadding?: boolean;
-    children?: React.ReactNode[];
+    children?: React.ReactNode[] | React.ReactElement[];
 }
 
 const Page: React.FC<PageProps> = ({ children, noPadding, style, ...rest }) => {
