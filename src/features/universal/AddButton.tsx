@@ -17,6 +17,8 @@ import {
 } from "../../constants/sizes";
 import { plusIcon, topleftQuarterCircle } from "../../assets/svg";
 import { PanResponder } from "react-native";
+import PlusIconView from "./add-button/PlusIconView";
+import TopLeftCircleCorner from "./add-button/TopLeftCircleCorner";
 
 interface AddButtonProps {
     gestureRef?: PanResponderInstance;
@@ -88,6 +90,7 @@ const AddButton: React.FC<AddButtonProps> = (
     const containerDim = windowWidth * FLOATING_ADD_BUTTON;
     // TESTING
     // const containerDim = windowWidth * 0.8;
+
     // ratio is relative to container dimensions
     const plusIconDim = containerDim * FLOATING_ADD_BUTTON_PLUS_ICON;
 
@@ -102,37 +105,7 @@ const AddButton: React.FC<AddButtonProps> = (
     // the Y px value
     const animY = useRef(new Animated.Value(0)).current;
 
-    // // TESTING
-    // useEffect(() => {
-    //     console.log("containerDim: ", containerDim);
-    // }, [containerDim]);
-
-    // // TESTING
-    // useEffect(() => {
-    //     console.log("plusIconDim: ", plusIconDim);
-    // }, [plusIconDim]);
-
-    // // TESTING
-    // useEffect(() => {
-    //     console.log("plusIconTranslation: ", plusIconTranslation);
-    // }, [plusIconTranslation])
-
-    // useEffect(() => {
-    //     if (!gestureRef) return;
-
-    //     const curRef = gestureRef.current
-
-    // }, [gestureRef])
-
     return (
-        // NOTE: old code
-        // <View style={styles.container}>
-        //     <Text style={styles.plusIcon}>+</Text>
-        // </View>
-        // NOTE: new animated.view code
-        // <View
-        //     // ref={gestureRef}
-        // >
         <Animated.View
             style={[
                 styles.positionAbsolute,
@@ -148,137 +121,13 @@ const AddButton: React.FC<AddButtonProps> = (
                     // right: -containerDim,
                     // bottom: -containerDim,
                     // borderRadius: containerDim // * 2 * 0.5 for circle
-                    // NOTE: newer-ish code
-                    // right: 0,
-                    // bottom: 0
                 },
             ]}
             {...gestureRef?.panHandlers}
         >
-            <View
-                // view-only attempt of corner circle background
-                style={[
-                    styles.positionAbsolute, 
-                    {
-                        width: containerDim,
-                        height: containerDim,
-                        borderRadius: containerDim / 2,
-                        backgroundColor: COLORS.SECONDARY.Dark,
-                        // shift the circle such that the top left corner is visible only
-                        right: -containerDim / 2,
-                        bottom: -containerDim / 2,
-                        // TODO: add shadow to separate secondary dark colour from the RoundedContainer colour
-                        // NOTE: temporary solution to the above TODO
-                        borderColor: COLORS.PRIMARY.Light,
-                        borderWidth: 1
-                    }
-                ]}
-                // {...gestureRef.panHandlers}
-            >
-            <View
-                // view-only attempt of + icon
-                style={[
-                    styles.positionAbsolute,
-                    {
-                        width: 25,
-                        height: 25,
-                        top: containerDim / 4 / 1.5,
-                        left: containerDim / 4 / 1.5,
-                        // TESTING
-                        // borderColor: "green",
-                        // borderWidth: 1
-                    }
-                ]}
-            >
-                <View 
-                    style={[
-                        styles.positionAbsolute,
-                        {
-                            height: 2,
-                            backgroundColor: COLORS.PRIMARY.Light,
-                            top: 25 /2,
-                            left: 0
-                        }
-                    ]}
-                >
-                </View>
-                <View 
-                    style={[
-                        styles.positionAbsolute,
-                        {
-                            height: 2,
-                            backgroundColor: COLORS.PRIMARY.Light,
-                            top: 25 /2,
-                            left: 0,
-                            transform: [
-                                {
-                                    rotate: "90deg"
-                                }
-                            ]
-                        }
-                    ]}
-                >
-                </View>
-            </View>
-                {/* <SvgXml
-                    // TODO: use containerDim instead of hard-coded constants
-                    // width={65}
-                    // height={65}
-                    width={containerDim}
-                    height={containerDim}
-                    // TESTING
-                    // width={windowWidth * 0.8}
-                    // height={windowWidth * 0.8}
-                    xml={topleftQuarterCircle}
-                    style={[
-                        styles.positionAbsolute,
-                        // TESTING
-                        {
-                            borderColor: "red",
-                            borderWidth: 1,
-                        },
-                    ]}
-                    // TESTING
-                    // stroke="blue"
-                /> */}
-            </View>
-            {/* <SvgXml
-                    // TODO: use containerDim for dynamic values
-                    // width={25}
-                    // height={25}
-                    width={plusIconDim}
-                    height={plusIconDim}
-                    xml={plusIcon}
-                    style={[
-                        {
-                            position: "absolute",
-                            // top: 0,
-                            // left: 0,
-                            top: -plusIconTranslation,
-                            left: -plusIconTranslation,
-                            // transform: [
-                            //     {
-                            //         translateX: -plusIconDim / 2,
-                            //     },
-                            //     {
-                            //         translateY: -plusIconDim / 2,
-                            //     },
-                            // ],
-                            // transform: [
-                            //     {
-                            //         translateX: -plusIconTranslation,
-                            //     },
-                            //     {
-                            //         translateY: -plusIconTranslation,
-                            //     },
-                            // ],
-                            // TESTING
-                            borderColor: "green",
-                            borderWidth: 1
-                        },
-                    ]}
-                    {...gestureRef.panHandlers}
-                /> */}
+            <TopLeftCircleCorner containerDim={containerDim}>
+                <PlusIconView containerDim={containerDim} />
+            </TopLeftCircleCorner>
         </Animated.View>
         // </View>
     );
