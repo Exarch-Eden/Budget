@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Animated,
     TouchableOpacity,
+    PanResponderInstance,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { FAB } from "react-native-paper";
@@ -17,12 +18,20 @@ import {
 import { plusIcon, topleftQuarterCircle } from "../../assets/svg";
 import { PanResponder } from "react-native";
 
-const AddButton = () => {
+interface AddButtonProps {
+    gestureRef?: PanResponderInstance;
+}
+
+const AddButton: React.FC<AddButtonProps> = (
+    {
+        // gestureRef
+    }
+) => {
     // used by animated api and styling
     const { windowWidth, windowHeight } = useDimensions();
     const [panGestureX, setPanGestureX] = useState(0);
     const [panGestureY, setPanGestureY] = useState(0);
-    
+
     // const gestureRef = useRef<TouchableOpacity>(null!);
     // NOTE: PanResponder's onPanResponderMove works almost as intended:
     // it terminates after only a few logs for some reason
@@ -31,6 +40,8 @@ const AddButton = () => {
     // docs:
     // https://reactnative.dev/docs/gesture-responder-system
     // https://reactnative.dev/docs/panresponder
+    // NOTE: below link details the issue with svgs and pan responder
+    // https://github.com/software-mansion/react-native-svg/issues/473
     const gestureRef = useRef(
         PanResponder.create({
             // Ask to be the responder:
@@ -38,6 +49,13 @@ const AddButton = () => {
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+            onPanResponderGrant: (evt, gestureState) => {
+                console.log("gesture granted: ", evt.nativeEvent.identifier);
+            },
+            onPanResponderReject: () => {
+                // TESTING
+                console.log("gesture rejected");
+            },
             onPanResponderMove: (evt, gestureState) => {
                 const event = evt.nativeEvent;
                 const rootX = event.pageX;
@@ -55,20 +73,21 @@ const AddButton = () => {
                 // Another component has become the responder, so this gesture
                 // should be cancelled
 
-                console.log("gesture terminated");
+                console.log("gesture terminated: ", evt.nativeEvent.identifier);
             },
+            onPanResponderTerminationRequest: () => true,
             onShouldBlockNativeResponder: (evt, gestureState) => {
                 // Returns whether this component should block native components from becoming the JS
                 // responder. Returns true by default. Is currently only supported on android.
-                return true;
+                return false;
             },
         })
     ).current;
 
     // width and height of the Animated.View container
-    // const containerDim = windowWidth * FLOATING_ADD_BUTTON;
+    const containerDim = windowWidth * FLOATING_ADD_BUTTON;
     // TESTING
-    const containerDim = windowWidth * 0.8;
+    // const containerDim = windowWidth * 0.8;
     // ratio is relative to container dimensions
     const plusIconDim = containerDim * FLOATING_ADD_BUTTON_PLUS_ICON;
 
@@ -111,25 +130,33 @@ const AddButton = () => {
         //     <Text style={styles.plusIcon}>+</Text>
         // </View>
         // NOTE: new animated.view code
-        <View
-            // ref={gestureRef}
-            {...gestureRef.panHandlers}
+        // <View
+        //     // ref={gestureRef}
+        // >
+        <Animated.View
+            style={[
+                styles.positionAbsolute,
+                {
+                    width: containerDim,
+                    height: containerDim,
+                    // TESTING
+                    borderColor: "red",
+                    borderWidth: 1,
+                    // NOTE: old code
+                    // width: containerDim * 2,
+                    // height: containerDim * 2,
+                    // right: -containerDim,
+                    // bottom: -containerDim,
+                    // borderRadius: containerDim // * 2 * 0.5 for circle
+                    // NOTE: newer-ish code
+                    // right: 0,
+                    // bottom: 0
+                },
+            ]}
+            {...gestureRef?.panHandlers}
         >
-            <Animated.View
-                style={[
-                    styles.positionAbsolute,
-                    {
-                        // NOTE: old code
-                        // width: containerDim * 2,
-                        // height: containerDim * 2,
-                        // right: -containerDim,
-                        // bottom: -containerDim,
-                        // borderRadius: containerDim // * 2 * 0.5 for circle
-                        // NOTE: newer-ish code
-                        // right: 0,
-                        // bottom: 0
-                    },
-                ]}
+            <View
+                {...gestureRef.panHandlers}
             >
                 <SvgXml
                     // TODO: use containerDim instead of hard-coded constants
@@ -150,11 +177,12 @@ const AddButton = () => {
                         },
                     ]}
                     // TESTING
-                    stroke="blue"
+                    // stroke="blue"
                 />
-                {/* TODO: change from Text to proper svg later */}
-                {/* <Text style={[styles.positionAbsolute, styles.plusIcon]}>+</Text> */}
-                <SvgXml
+            </View>
+            {/* TODO: change from Text to proper svg later */}
+            {/* <Text style={[styles.positionAbsolute, styles.plusIcon]}>+</Text> */}
+            {/* <SvgXml
                     // TODO: use containerDim for dynamic values
                     // width={25}
                     // height={25}
@@ -184,11 +212,15 @@ const AddButton = () => {
                             //         translateY: -plusIconTranslation,
                             //     },
                             // ],
+                            // TESTING
+                            borderColor: "green",
+                            borderWidth: 1
                         },
                     ]}
-                />
-            </Animated.View>
-        </View>
+                    {...gestureRef.panHandlers}
+                /> */}
+        </Animated.View>
+        // </View>
     );
 };
 
