@@ -5,7 +5,7 @@ import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Provider as PaperProvider } from "react-native-paper"
+import { Provider as PaperProvider } from "react-native-paper";
 // import Home from "./src_old/screens/bottom-tabs/Home";
 import Home from "./src/features/home/Home";
 import { Provider } from "react-redux";
@@ -26,14 +26,15 @@ import { RootStackParamList } from "./src_old/constants/types/navigation";
 import BottomNav from "./src/features/bottom-nav/BottomNav";
 import useDimensions from "./src/hooks/useDimensions";
 import AddButton from "./src/features/universal/AddButton";
+import usePanResponder from "./src/hooks/usePanResponder";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
     const Stack = createStackNavigator();
 
-    const { setDimensions } = useDimensions()
-
+    const { setDimensions } = useDimensions();
+    const { gestureRef } = usePanResponder();
     // const Stack = createStackNavigator<RootStackParamList>();
     // useDimensions();
 
@@ -46,7 +47,7 @@ const App = () => {
             windowHeight: Dimensions.get("window").height,
             screenWidth: Dimensions.get("screen").width,
             screenHeight: Dimensions.get("screen").height,
-        })
+        });
 
         /**
          * Checks to see if user is a guest and has already used the app prior.
@@ -72,18 +73,26 @@ const App = () => {
     //     </NavigationContainer>
     // </Provider>
     return (
-        <PaperProvider>
-            <NavigationContainer>
+        <NavigationContainer>
+            <View
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    borderColor: "red",
+                    borderWidth: 1,
+                }}
+                // {...gestureRef.panHandlers}
+            >
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Home" component={Home} />
+                    <Stack.Screen name="Home" component={() => <Home gestureRef={gestureRef} />} />
                 </Stack.Navigator>
-                <AddButton />
+                <AddButton gestureRef={gestureRef} />
                 {/* NOTE: old code below (standard bottom nav) */}
                 {/* <Stack.Navigator screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="BottomNav" component={BottomNav} />
                 </Stack.Navigator> */}
-            </NavigationContainer>
-        </PaperProvider>
+            </View>
+        </NavigationContainer>
     );
 };
 
@@ -164,8 +173,6 @@ const App = () => {
 //     );
 // };
 
-const styles = StyleSheet.create({
-    
-});
+const styles = StyleSheet.create({});
 
 export default App;

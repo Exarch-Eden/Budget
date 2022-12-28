@@ -1,4 +1,4 @@
-import { View, Dimensions, SafeAreaView, StyleSheet } from "react-native";
+import { View, Dimensions, SafeAreaView, StyleSheet, PanResponderInstance } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import Carousel from "react-native-snap-carousel";
 import { Account } from "../../types/account";
@@ -9,9 +9,17 @@ import DonutChart from "../universal/DonutChart";
 import Page from "../universal/Page";
 import ThemedText from "../universal/ThemedText";
 import useDimensions from "../../hooks/useDimensions";
+import usePanResponder from "../../hooks/usePanResponder";
 
-const Home = () => {
+interface HomeProps {
+    gestureRef?: PanResponderInstance
+}
+
+const Home: React.FC<HomeProps> = ({
+    gestureRef
+}) => {
     const { windowWidth, windowHeight } = useDimensions()
+    // const { gestureRef } = usePanResponder()
 
     const [accounts, setAccounts] = useState<Account[]>([]);
 
@@ -41,7 +49,7 @@ const Home = () => {
 
     return (
         <Page
-            
+            // {...gestureRef?.panHandlers}
             style={{
                 alignItems: "center"
             }}
