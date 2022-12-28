@@ -156,9 +156,71 @@ const AddButton: React.FC<AddButtonProps> = (
             {...gestureRef?.panHandlers}
         >
             <View
-                {...gestureRef.panHandlers}
+                // view-only attempt of corner circle background
+                style={[
+                    styles.positionAbsolute, 
+                    {
+                        width: containerDim,
+                        height: containerDim,
+                        borderRadius: containerDim / 2,
+                        backgroundColor: COLORS.SECONDARY.Dark,
+                        // shift the circle such that the top left corner is visible only
+                        right: -containerDim / 2,
+                        bottom: -containerDim / 2,
+                        // TODO: add shadow to separate secondary dark colour from the RoundedContainer colour
+                        // NOTE: temporary solution to the above TODO
+                        borderColor: COLORS.PRIMARY.Light,
+                        borderWidth: 1
+                    }
+                ]}
+                // {...gestureRef.panHandlers}
             >
-                <SvgXml
+            <View
+                // view-only attempt of + icon
+                style={[
+                    styles.positionAbsolute,
+                    {
+                        width: 25,
+                        height: 25,
+                        top: containerDim / 4 / 1.5,
+                        left: containerDim / 4 / 1.5,
+                        // TESTING
+                        // borderColor: "green",
+                        // borderWidth: 1
+                    }
+                ]}
+            >
+                <View 
+                    style={[
+                        styles.positionAbsolute,
+                        {
+                            height: 2,
+                            backgroundColor: COLORS.PRIMARY.Light,
+                            top: 25 /2,
+                            left: 0
+                        }
+                    ]}
+                >
+                </View>
+                <View 
+                    style={[
+                        styles.positionAbsolute,
+                        {
+                            height: 2,
+                            backgroundColor: COLORS.PRIMARY.Light,
+                            top: 25 /2,
+                            left: 0,
+                            transform: [
+                                {
+                                    rotate: "90deg"
+                                }
+                            ]
+                        }
+                    ]}
+                >
+                </View>
+            </View>
+                {/* <SvgXml
                     // TODO: use containerDim instead of hard-coded constants
                     // width={65}
                     // height={65}
@@ -178,10 +240,8 @@ const AddButton: React.FC<AddButtonProps> = (
                     ]}
                     // TESTING
                     // stroke="blue"
-                />
+                /> */}
             </View>
-            {/* TODO: change from Text to proper svg later */}
-            {/* <Text style={[styles.positionAbsolute, styles.plusIcon]}>+</Text> */}
             {/* <SvgXml
                     // TODO: use containerDim for dynamic values
                     // width={25}
