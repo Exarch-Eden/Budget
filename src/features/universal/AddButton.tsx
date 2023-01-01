@@ -31,8 +31,16 @@ const AddButton: React.FC<AddButtonProps> = (
 ) => {
     // used by animated api and styling
     const { windowWidth, windowHeight } = useDimensions();
-    const [panGestureX, setPanGestureX] = useState(0);
-    const [panGestureY, setPanGestureY] = useState(0);
+    const [panGestureX, setPanGestureX] = useState<number | undefined>();
+    const [panGestureY, setPanGestureY] = useState<number | undefined>();
+    const [isPanning, setIsPanning] = useState(false);
+    // if set to true, will navigate to the add value modal or screen
+    const [isTriggered, setIsTriggered] = useState(false);
+
+    // the X px value
+    const animX = useRef(new Animated.Value(0)).current;
+    // the Y px value
+    const animY = useRef(new Animated.Value(0)).current;
 
     // const gestureRef = useRef<TouchableOpacity>(null!);
     // NOTE: PanResponder's onPanResponderMove works almost as intended:
@@ -53,6 +61,7 @@ const AddButton: React.FC<AddButtonProps> = (
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
             onPanResponderGrant: (evt, gestureState) => {
                 console.log("gesture granted: ", evt.nativeEvent.identifier);
+                setIsPanning(true)
             },
             onPanResponderReject: () => {
                 // TESTING
@@ -63,13 +72,20 @@ const AddButton: React.FC<AddButtonProps> = (
                 const rootX = event.pageX;
                 const rootY = event.pageY;
 
-                console.log(`gesture (x, y): (${rootX}, ${rootY})`);
+                // console.log(`gesture (x, y): (${rootX}, ${rootY})`);
+                setPanGestureX(rootX)
+                setPanGestureY(rootY)
             },
             onPanResponderRelease: (evt, gestureState) => {
                 // The user has released all touches while this view is the
                 // responder. This typically means a gesture has succeeded
 
-                console.log("gesture released");
+                const rootX = evt.nativeEvent.pageX
+                const rootY = evt.nativeEvent.pageY
+
+                console.log(`gesture released at (${rootX}, ${rootY})`);
+                
+                setIsPanning(false)
             },
             onPanResponderTerminate: (evt, gestureState) => {
                 // Another component has become the responder, so this gesture
@@ -100,16 +116,43 @@ const AddButton: React.FC<AddButtonProps> = (
     // ((containerDim / 2))  + (plusIconDim / 2)
     // (Math.cos(3 * Math.PI / 4) * (containerDim / 2))
 
-    // the X px value
-    const animX = useRef(new Animated.Value(0)).current;
-    // the Y px value
-    const animY = useRef(new Animated.Value(0)).current;
+    // TESTING
+    useEffect(() => {
+        console.log("windowWidth / 2: ", windowWidth / 2);
+    }, [windowWidth])
+
+    useEffect(() => {
+        console.log("isPanning: ", isPanning);
+
+        if (!isPanning) {
+            // NOTE: 0, 0 is at the top left corner of the screen
+            const xCondition = typeof panGestureX === "number" && panGestureX <= windowWidth / 2
+            const yCondition = typeof panGestureY === "number" && panGestureY <= windowHeight / 2
+
+            console.log("xCondition: ", xCondition);
+            console.log("yCondition: ", yCondition);
+            
+            setIsTriggered(xCondition || yCondition)
+        }
+    }, [isPanning])
+
+    // TESTING
+    useEffect(() => {
+        console.log("isTriggered: ", isTriggered);
+        setIsTriggered(false)
+    }, [isTriggered])
+
+    // TESTING
+    useEffect(() => {
+        console.log(`(${panGestureX}, ${panGestureY})`);
+    }, [panGestureX, panGestureY])
 
     return (
         <Animated.View
             style={[
                 styles.positionAbsolute,
                 {
+                    // TODO: increase value
                     width: containerDim,
                     height: containerDim,
                     // TESTING
