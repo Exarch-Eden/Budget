@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { COLORS } from "../../../styles";
+import { COLORS } from "../../../../styles";
 
 interface PlusIconViewProps {
     containerDim: number;

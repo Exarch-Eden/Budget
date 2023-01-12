@@ -9,13 +9,13 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { FAB } from "react-native-paper";
 import { SvgXml } from "react-native-svg";
-import { COLORS } from "../../styles";
-import useDimensions from "../../hooks/useDimensions";
+import { COLORS } from "../../../styles";
+import useDimensions from "../../../hooks/useDimensions";
 import {
     FLOATING_ADD_BUTTON,
     FLOATING_ADD_BUTTON_PLUS_ICON,
-} from "../../constants/sizes";
-import { plusIcon, topleftQuarterCircle } from "../../assets/svg";
+} from "../../../constants/sizes";
+import { plusIcon, topleftQuarterCircle } from "../../../assets/svg";
 import { PanResponder } from "react-native";
 import PlusIconView from "./add-button/PlusIconView";
 import TopLeftCircleCorner from "./add-button/TopLeftCircleCorner";

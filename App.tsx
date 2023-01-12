@@ -25,7 +25,7 @@ import { Splash } from "./src_old/screens";
 import { RootStackParamList } from "./src_old/constants/types/navigation";
 import BottomNav from "./src/features/bottom-nav/BottomNav";
 import useDimensions from "./src/hooks/useDimensions";
-import AddButton from "./src/features/universal/AddButton";
+import AddButton from "./src/features/add-value/components/AddButton";
 import usePanResponder from "./src/hooks/usePanResponder";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
