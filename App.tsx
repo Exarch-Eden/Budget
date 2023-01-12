@@ -22,17 +22,18 @@ import Settings from "./src_old/screens/bottom-tabs/Settings";
 import DrawerNavigator from "./src_old/navigation/DrawerNavigator";
 
 import { Splash } from "./src_old/screens";
-import { RootStackParamList } from "./src_old/constants/types/navigation";
+import { RootStackParamList } from "./src/types/navigation";
 import BottomNav from "./src/features/bottom-nav/BottomNav";
 import useDimensions from "./src/hooks/useDimensions";
 import AddButton from "./src/features/add-value/components/AddButton";
 import usePanResponder from "./src/hooks/usePanResponder";
 import AddValue from "./src/features/add-value/AddValue";
+import { navigationRef } from "./src/helpers/navigation";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
-    const Stack = createStackNavigator();
+    const Stack = createStackNavigator<RootStackParamList>();
 
     const { setDimensions } = useDimensions();
     const { gestureRef } = usePanResponder();
@@ -73,8 +74,9 @@ const App = () => {
     //         <FlashMessage position="top" />
     //     </NavigationContainer>
     // </Provider>
+    
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <View
                 style={{
                     width: "100%",
