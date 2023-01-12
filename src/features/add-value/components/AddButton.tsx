@@ -19,6 +19,7 @@ import { plusIcon, topleftQuarterCircle } from "../../../assets/svg";
 import { PanResponder } from "react-native";
 import PlusIconView from "./add-button/PlusIconView";
 import TopLeftCircleCorner from "./add-button/TopLeftCircleCorner";
+import { navigationRef } from "../../../helpers/navigation";
 
 interface AddButtonProps {
     gestureRef?: PanResponderInstance;
@@ -139,6 +140,9 @@ const AddButton: React.FC<AddButtonProps> = (
     // TESTING
     useEffect(() => {
         console.log("isTriggered: ", isTriggered);
+        if (isTriggered) {
+            navigationRef.current?.navigate("AddValue")
+        }
         setIsTriggered(false)
     }, [isTriggered])
 
