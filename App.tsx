@@ -27,6 +27,7 @@ import BottomNav from "./src/features/bottom-nav/BottomNav";
 import useDimensions from "./src/hooks/useDimensions";
 import AddButton from "./src/features/add-value/components/AddButton";
 import usePanResponder from "./src/hooks/usePanResponder";
+import AddValue from "./src/features/add-value/AddValue";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
@@ -85,6 +86,7 @@ const App = () => {
             >
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="Home" component={() => <Home gestureRef={gestureRef} />} />
+                    <Stack.Screen name="AddValue" component={AddValue} />
                 </Stack.Navigator>
                 <AddButton gestureRef={gestureRef} />
                 {/* NOTE: old code below (standard bottom nav) */}
