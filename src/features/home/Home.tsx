@@ -1,17 +1,25 @@
-import { View, Dimensions, SafeAreaView, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Dimensions, SafeAreaView, StyleSheet, PanResponderInstance } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import Carousel from "react-native-snap-carousel";
 import { Account } from "../../types/account";
 import AccountCarousel from "./components/AccountCarousel";
 import { VictoryPie } from "victory-native";
-import { COLORS } from "../../styles";
+import { COLORS, TEXT } from "../../styles";
 import DonutChart from "../universal/DonutChart";
 import Page from "../universal/Page";
 import ThemedText from "../universal/ThemedText";
 import useDimensions from "../../hooks/useDimensions";
+import usePanResponder from "../../hooks/usePanResponder";
 
-const Home = () => {
+interface HomeProps {
+    gestureRef?: PanResponderInstance
+}
+
+const Home: React.FC<HomeProps> = ({
+    gestureRef
+}) => {
     const { windowWidth, windowHeight } = useDimensions()
+    // const { gestureRef } = usePanResponder()
 
     const [accounts, setAccounts] = useState<Account[]>([]);
 
@@ -40,10 +48,13 @@ const Home = () => {
     }, [])
 
     return (
-        <Page style={{
-            alignItems: "center"
-        }}>
-            <ThemedText>
+        <Page
+            // {...gestureRef?.panHandlers}
+            style={{
+                alignItems: "center"
+            }}
+        >
+            <ThemedText style={TEXT.Large}>
                 Dashboard
             </ThemedText>
             {/* <DonutChart /> */}

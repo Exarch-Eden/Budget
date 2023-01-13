@@ -16,3 +16,12 @@ export interface Dimensions {
 }
 
 export type TextSize = "small" | "medium" | "large"
+
+/**
+ * Used to store dimension ratios of components
+ * based on their Figma design.
+ */
+export interface SizeRatioConstant {
+    WIDTH: number,
+    HEIGHT: number
+}

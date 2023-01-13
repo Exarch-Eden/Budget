@@ -16,6 +16,8 @@ import { COLORS, SPACING } from "../../../styles";
 import useDimensions from "../../../hooks/useDimensions";
 import { CHART_ANIMATION_DURATION_MS } from "../../../constants/chart";
 import Svg from "react-native-svg";
+import AccountPie from "./AccountPie";
+import AccountSummary from "./AccountSummary";
 
 interface AccountCarouselProps
     extends Omit<CarouselProps<Account>, "renderItem"> {
@@ -28,7 +30,7 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
     const containerWidth = windowWidth * 0.9
     const containerHeight = windowHeight * 0.9
     const pieDimensions = containerWidth * 0.2214
-    const pieRadius = pieDimensions / 2
+    // NOTE: old code
     // const pieRadius = Dimensions.get("window").width / 2 - SPACING.GENERAL * 2
 
     useEffect(() => {
@@ -37,11 +39,9 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
             windowHeight
         });
 
-        console.log("pieDimensions:\n", pieDimensions);        
+        console.log("pieDimensions:\n", pieDimensions);
     }, [windowWidth, windowHeight])
     
-    
-
     const renderItem: ListRenderItem<Account> = ({ item, index }) => {
         return (
             <TouchableWithoutFeedback
@@ -59,45 +59,8 @@ const AccountCarousel: React.FC<AccountCarouselProps> = ({ data, ...rest }) => {
                         borderColor: "red",
                         borderWidth: 1
                     }}
-                    noPadding
                 >
-                    <Svg
-                        height={pieDimensions}
-                        width={pieDimensions}
-                        // height={containerHeight}
-                        // width={containerWidth}
-                        // for testing purposes; TODO: remove later
-                        style={{
-                            borderColor: "blue",
-                            borderWidth: 1
-                        }}
-                    >
-                    <VictoryPie
-                        animate={{ duration: CHART_ANIMATION_DURATION_MS }}
-                        // for testing purposes; TODO: remove later                        
-                        data={[
-                            {
-                                y: 1,
-                                color: COLORS.PRIMARY.Green
-                            }
-                        ]}
-                        height={pieDimensions}
-                        width={pieDimensions}
-                        // height={containerHeight}
-                        // width={containerWidth}
-                        radius={pieRadius}
-                        innerRadius={pieRadius - SPACING.GENERAL}
-                        // radius={pieRadius}
-                        // innerRadius={pieRadius - SPACING.GENERAL}
-                        style={{
-                            data: {
-                                fill: ({ datum }) => datum.color
-                            },
-                        }}
-                        // height={300}
-                        // width={Dimensions.get("window").width}
-                    />
-                    </Svg>
+                    <AccountSummary accountId={item.Id} pieDimensions={pieDimensions} />
                 </RoundedContainer>
             </TouchableWithoutFeedback>
         );

@@ -1,5 +1,7 @@
 export type RootStackParamList = {
-    BottomNav: undefined
+    // BottomNav: undefined
+    Home: undefined
+    AddValue: undefined
 }
 
 export type BottomNavStackParamList = {

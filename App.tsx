@@ -5,7 +5,9 @@ import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./src_old/screens/bottom-tabs/Home";
+import { Provider as PaperProvider } from "react-native-paper";
+// import Home from "./src_old/screens/bottom-tabs/Home";
+import Home from "./src/features/home/Home";
 import { Provider } from "react-redux";
 import { store } from "./src_old/redux/store";
 import FlashMessage from "react-native-flash-message";
@@ -20,17 +22,21 @@ import Settings from "./src_old/screens/bottom-tabs/Settings";
 import DrawerNavigator from "./src_old/navigation/DrawerNavigator";
 
 import { Splash } from "./src_old/screens";
-import { RootStackParamList } from "./src_old/constants/types/navigation";
+import { RootStackParamList } from "./src/types/navigation";
 import BottomNav from "./src/features/bottom-nav/BottomNav";
 import useDimensions from "./src/hooks/useDimensions";
+import AddButton from "./src/features/add-value/components/AddButton";
+import usePanResponder from "./src/hooks/usePanResponder";
+import AddValue from "./src/features/add-value/AddValue";
+import { navigationRef } from "./src/helpers/navigation";
 
 type TAB_NAMES = "Dashboard" | "Add" | "Setting";
 
 const App = () => {
-    const Stack = createStackNavigator();
+    const Stack = createStackNavigator<RootStackParamList>();
 
-    const { setDimensions } = useDimensions()
-
+    const { setDimensions } = useDimensions();
+    const { gestureRef } = usePanResponder();
     // const Stack = createStackNavigator<RootStackParamList>();
     // useDimensions();
 
@@ -43,7 +49,7 @@ const App = () => {
             windowHeight: Dimensions.get("window").height,
             screenWidth: Dimensions.get("screen").width,
             screenHeight: Dimensions.get("screen").height,
-        })
+        });
 
         /**
          * Checks to see if user is a guest and has already used the app prior.
@@ -51,28 +57,46 @@ const App = () => {
          */
     }, []);
 
+    // NOTE: old return code:
+    // <Provider store={store}>
+    //     <NavigationContainer>
+    //         <Stack.Navigator
+    //             screenOptions={{
+    //                 headerShown: false,
+    //             }}
+    //             initialRouteName="Splash"
+    //         >
+    //             <Stack.Screen name="Splash" component={Splash} />
+    //             <Stack.Screen name="Landing" component={Landing} />
+    //             <Stack.Screen name="Home" component={DrawerNavigator} />
+    //             {/* <Stack.Screen name='Home' component={BottomTab} /> */}
+    //         </Stack.Navigator>
+    //         <FlashMessage position="top" />
+    //     </NavigationContainer>
+    // </Provider>
+    
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="BottomNav" component={BottomNav} />
-            </Stack.Navigator>
+        <NavigationContainer ref={navigationRef}>
+            <View
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    borderColor: "red",
+                    borderWidth: 1,
+                }}
+                // {...gestureRef.panHandlers}
+            >
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Home" component={() => <Home gestureRef={gestureRef} />} />
+                    <Stack.Screen name="AddValue" component={AddValue} />
+                </Stack.Navigator>
+                <AddButton gestureRef={gestureRef} />
+                {/* NOTE: old code below (standard bottom nav) */}
+                {/* <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="BottomNav" component={BottomNav} />
+                </Stack.Navigator> */}
+            </View>
         </NavigationContainer>
-        // <Provider store={store}>
-        //     <NavigationContainer>
-        //         <Stack.Navigator
-        //             screenOptions={{
-        //                 headerShown: false,
-        //             }}
-        //             initialRouteName="Splash"
-        //         >
-        //             <Stack.Screen name="Splash" component={Splash} />
-        //             <Stack.Screen name="Landing" component={Landing} />
-        //             <Stack.Screen name="Home" component={DrawerNavigator} />
-        //             {/* <Stack.Screen name='Home' component={BottomTab} /> */}
-        //         </Stack.Navigator>
-        //         <FlashMessage position="top" />
-        //     </NavigationContainer>
-        // </Provider>
     );
 };
 
@@ -153,8 +177,6 @@ const App = () => {
 //     );
 // };
 
-const styles = StyleSheet.create({
-    
-});
+const styles = StyleSheet.create({});
 
 export default App;
