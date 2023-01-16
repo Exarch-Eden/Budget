@@ -1,9 +1,11 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import DimensionsSlice from "./reducers/dimensions";
+import PanResponderSlice from "./reducers/pan-responder";
 
 export const store = configureStore({
     reducer: {
-        Dimensions: DimensionsSlice
+        Dimensions: DimensionsSlice,
+        PanResponder: PanResponderSlice,
     },
 });
 
