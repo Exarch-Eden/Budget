@@ -87,7 +87,7 @@ const App = () => {
                 // {...gestureRef.panHandlers}
             >
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Home" component={() => <Home gestureRef={gestureRef} />} />
+                    <Stack.Screen name="Home" component={Home} />
                     <Stack.Screen name="AddValue" component={AddValue} />
                 </Stack.Navigator>
                 <AddButton gestureRef={gestureRef} />
