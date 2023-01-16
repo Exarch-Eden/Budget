@@ -43,12 +43,7 @@ const AddButton: React.FC<AddButtonProps> = (
     // the Y px value
     const animY = useRef(new Animated.Value(0)).current;
 
-    // const gestureRef = useRef<TouchableOpacity>(null!);
-    // NOTE: PanResponder's onPanResponderMove works almost as intended:
-    // it terminates after only a few logs for some reason
-    // TODO: test PanResponder with the root App component to see if it terminates almost immediately as well
-    // if PanResponder works better in the App component, will have to connect it to this one
-    // docs:
+    // NOTE: docs below
     // https://reactnative.dev/docs/gesture-responder-system
     // https://reactnative.dev/docs/panresponder
     // NOTE: below link details the issue with svgs and pan responder
@@ -117,10 +112,10 @@ const AddButton: React.FC<AddButtonProps> = (
     // ((containerDim / 2))  + (plusIconDim / 2)
     // (Math.cos(3 * Math.PI / 4) * (containerDim / 2))
 
-    // TESTING
-    useEffect(() => {
-        console.log("windowWidth / 2: ", windowWidth / 2);
-    }, [windowWidth])
+    // // TESTING
+    // useEffect(() => {
+    //     console.log("windowWidth / 2: ", windowWidth / 2);
+    // }, [windowWidth])
 
     useEffect(() => {
         console.log("isPanning: ", isPanning);
@@ -146,10 +141,10 @@ const AddButton: React.FC<AddButtonProps> = (
         setIsTriggered(false)
     }, [isTriggered])
 
-    // TESTING
-    useEffect(() => {
-        console.log(`(${panGestureX}, ${panGestureY})`);
-    }, [panGestureX, panGestureY])
+    // // TESTING
+    // useEffect(() => {
+    //     console.log(`(${panGestureX}, ${panGestureY})`);
+    // }, [panGestureX, panGestureY])
 
     return (
         <Animated.View
