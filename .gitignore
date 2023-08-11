@@ -61,5 +61,8 @@ buck-out/
 
 # ---------------------------------- CUSTOM ---------------------------------- #
 
+# LOCAL SCRIPTS
+scripts/
+
 # HSBC API
 hsbc_api/

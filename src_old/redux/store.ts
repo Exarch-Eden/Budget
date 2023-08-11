@@ -1,11 +1,19 @@
-import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import DimensionsSlice from "./reducers/dimensions";
-import PanResponderSlice from "./reducers/pan-responder";
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import {
+    ActivitySlice,
+    DimensionsSlice,
+    LoadingSlice,
+    MonetarySlice,
+    UserSlice,
+} from "./reducers";
 
 export const store = configureStore({
     reducer: {
+        Activity: ActivitySlice,
         Dimensions: DimensionsSlice,
-        PanResponder: PanResponderSlice,
+        Loading: LoadingSlice,
+        Monetary: MonetarySlice,
+        User: UserSlice,
     },
 });
 
