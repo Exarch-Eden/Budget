@@ -40,3 +40,7 @@ For more information regarding the app structure layers, refer to these document
 - [UI Layer](https://developer.android.com/topic/architecture/ui-layer)
 - [Domain Layer](https://developer.android.com/topic/architecture/domain-layer)
 - [Data Layer](https://developer.android.com/topic/architecture/data-layer)
+
+For more information regarding the tree layout format, refer to these links:
+- [StackOverflow Thread](https://stackoverflow.com/questions/19699059/print-directory-file-structure-with-icons-for-representation-in-markdown)
+- [StackExchange Thread](https://meta.stackexchange.com/questions/147467/is-there-a-good-way-to-represent-file-structure-in-a-question-answer)
