@@ -54,3 +54,7 @@ TODO: insert dependency graph
 Other links to documentation and threads involving relevant principles or logic in this app's development:
 
 - [Example app repo](https://github.com/android/nowinandroid)
+
+## Unit Testing
+
+TODO: research JUnit testing and CI/CD integration with github workflows (look for something similar to CircleCI or learn to make own build file)
