@@ -44,3 +44,13 @@ For more information regarding the app structure layers, refer to these document
 For more information regarding the tree layout format, refer to these links:
 - [StackOverflow Thread](https://stackoverflow.com/questions/19699059/print-directory-file-structure-with-icons-for-representation-in-markdown)
 - [StackExchange Thread](https://meta.stackexchange.com/questions/147467/is-there-a-good-way-to-represent-file-structure-in-a-question-answer)
+
+## Application Modularization
+The application dependency graph follows [Android Studio's modularization principles](https://developer.android.com/topic/modularization)
+
+TODO: insert dependency graph
+
+## Other References
+Other links to documentation and threads involving relevant principles or logic in this app's development:
+
+- [Example app repo](https://github.com/android/nowinandroid)
